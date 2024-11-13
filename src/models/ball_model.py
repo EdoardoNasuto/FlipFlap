@@ -1,0 +1,38 @@
+class Ball:
+    """
+    Représente une bille se déplaçant dans une grille.
+
+    Attributes:
+        x (int): La position en x de la bille
+        y (int): La position en y de la bille
+        direction (str): La direction de la bille
+    """
+
+    def __init__(self, x: int, y: int, direction: str):
+        """
+        Initialise une bille à la position (x, y) avec une direction spécifiée.
+
+        Attributes:
+            x (int): La position en x de la bille
+            y (int): La position en y de la bille
+            direction (str): La direction de la bille
+        """
+        self.x = x
+        self.y = y
+        self.direction = direction
+
+    def move(self) -> None:
+        """Déplace la bille en fonction de sa direction."""
+        ...
+
+    def turn_left(self) -> None:
+        """Tourne la bille vers la gauche."""
+        ...
+
+    def turn_right(self) -> None:
+        """Tourne la bille vers la droite."""
+        ...
+
+    def reverse(self) -> None:
+        """Fait faire demi-tour à la bille"""
+        ...
