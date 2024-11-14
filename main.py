@@ -18,6 +18,8 @@ def main():
     gui = GameView(grid, 10)
     controller = GameController(grid, gui, NUM_OBSTACLES, NUM_BALLS)
     controller.start_round()
+    gui.window.attendreClic()
+    gui.window.fermerFenetre()
 
 
 if __name__ == "__main__":

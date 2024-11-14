@@ -36,13 +36,13 @@ class GameController:
             n (int): Le nombre d'obstacles à ajouter.
         """
         coord = []
-        for x in range(self.model.grid):
-            for y in range(self.model.grid[x]):
+        for x in range(self.model.width):
+            for y in range(self.model.height):
                 coord.append((x, y))
         coord = sample(coord, n)
-        for _ in range(n):
+        for i in range(n):
             self.model.add_obstacle(
-                coord[0], coord[1], Obstacle(coord[0], coord[1], "red"))
+                coord[i][0], coord[i][1], Obstacle(coord[0], coord[1], "red"))
         self.view.create_obstacle()
 
     def setup_balls(self, n):

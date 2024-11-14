@@ -23,8 +23,6 @@ class GameView:
         self.grid = grid
         self.size = size
         self.create_grid()
-        self.window.attendreClic()
-        self.window.fermerFenetre()
 
     def create_grid(self):
         """
