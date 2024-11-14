@@ -1,5 +1,7 @@
 from src.views.game_view import GameView
 from src.models.grid_model import Grid
+from src.models.obstacle_model import Obstacle
+from random import sample
 
 
 class GameController:
@@ -33,7 +35,15 @@ class GameController:
         Args:
             n (int): Le nombre d'obstacles à ajouter.
         """
-        ...
+        coord = []
+        for x in range(self.model.grid):
+            for y in range(self.model.grid[x]):
+                coord.append((x, y))
+        coord = sample(coord, n)
+        for _ in range(n):
+            self.model.add_obstacle(
+                coord[0], coord[1], Obstacle(coord[0], coord[1], "red"))
+        self.view.create_obstacle()
 
     def setup_balls(self, n):
         """

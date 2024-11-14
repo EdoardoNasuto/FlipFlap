@@ -23,16 +23,30 @@ class Ball:
 
     def move(self) -> None:
         """Déplace la bille en fonction de sa direction."""
-        ...
+        if self.direction == "left":
+            self.x += -1
+        if self.direction == "right":
+            self.x += 1
+        if self.direction == "up":
+            self.y += -1
+        if self.direction == "down":
+            self.y += 1
 
     def turn_left(self) -> None:
-        """Tourne la bille vers la gauche."""
-        ...
+        """Tourne la bille en direction de la gauche."""
+        self.direction = "left"
 
     def turn_right(self) -> None:
-        """Tourne la bille vers la droite."""
-        ...
+        """Tourne la bille en direction la droite."""
+        self.direction = "right"
 
     def reverse(self) -> None:
-        """Fait faire demi-tour à la bille"""
-        ...
+        """Fait faire demi-tour à la direction bille"""
+        if self.direction == "left":
+            self.direction = "right"
+        elif self.direction == "right":
+            self.direction = "left"
+        elif self.direction == "up":
+            self.direction = "down"
+        elif self.direction == "down":
+            self.direction = "down"

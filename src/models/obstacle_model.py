@@ -1,3 +1,6 @@
+from src.models.ball_model import Ball
+
+
 class Obstacle:
     """
     Représente un obstacle sur la grille qui peut affecter les billes.
@@ -21,11 +24,18 @@ class Obstacle:
         self.y = y
         self.color = color
 
-    def affect_ball(self, ball: object) -> None:
+    def affect_ball(self, ball: Ball) -> None:
         """
         Applique l'effet de l'obstacle sur la bille en fonction de la couleur de l'obstacle.
 
         Args:
             ball (Ball): La bille sur laquelle l'obstacle aura un effet.
         """
-        ...
+        if self.color == "blue":
+            ball.turn_right()
+
+        elif self.color == "red":
+            ball.turn_left()
+
+        elif self.color == "green":
+            ball.reverse()
