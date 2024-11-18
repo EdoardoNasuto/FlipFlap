@@ -23,10 +23,12 @@ class GameView:
         self.grid = grid
         self.size = size
         self.create_grid()
+        self.create_obstacle()
+        self.create_balls()
 
-    def create_grid(self):
+    def create_grid(self) -> None:
         """
-        Dessine les cases et crée les éléments graphiques.
+        Dessine les cases de la grille.
         """
         for x in range(0, self.grid.width):
             self.window.dessinerLigne(
@@ -35,7 +37,10 @@ class GameView:
             self.window.dessinerLigne(
                 0, y*self.size, self.grid.width*self.size, y*self.size,  "white")
 
-    def create_obstacle(self):
+    def create_obstacle(self) -> None:
+        """
+        Dessine les obstacles sur la grille
+        """
         for line in range(len(self.grid.grid)):
             for column in range(len(self.grid.grid[line])):
                 if self.grid.grid[line][column] != 0:
@@ -43,7 +48,13 @@ class GameView:
                         column*self.size+1, line*self.size+1, self.size-2, self.size-2,
                         self.grid.grid[line][column].color)
 
-    def update_ball(self, x1: int, y1: int, x2: int, y2: int):
+    def create_balls(self) -> None:
+        """
+        Dessine les billes sur la grille
+        """
+        ...
+
+    def update_ball(self, x1: int, y1: int, x2: int, y2: int) -> None:
         """
         Déplace la bille de sa position actuelle `(x1, y1)` vers sa nouvelle position `(x2, y2)` dans la grille.
 
@@ -53,3 +64,4 @@ class GameView:
             x2 (int): Coordonnée x de la nouvelle position de la bille.
             y2 (int): Coordonnée y de la nouvelle position de la bille.
         """
+        ...

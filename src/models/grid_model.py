@@ -1,3 +1,7 @@
+from random import sample
+from src.models.obstacle_model import Obstacle
+
+
 class Grid:
     """
     Représente une grille de jeu avec des obstacles et des billes.
@@ -9,7 +13,7 @@ class Grid:
         balls (list): La liste des billes ajoutées à la grille.
     """
 
-    def __init__(self, width: int, height: int):
+    def __init__(self, width: int, height: int, num_obstacles: int, num_balls: int):
         """
         Initialise une grille de jeu avec la largeur et la hauteur.
 
@@ -21,6 +25,33 @@ class Grid:
         self.height = height
         self.grid = [[0 for _ in range(width)] for _ in range(height)]
         self.balls = []
+        self.setup_obstacles(num_obstacles)
+        self.setup_balls(num_balls)
+
+    def setup_obstacles(self, n):
+        """
+        Ajoute un nombre défini d'obstacles dans la grille pour interagir avec les billes.
+
+        Args:
+            n (int): Le nombre d'obstacles à ajouter.
+        """
+        coord = []
+        for x in range(self.width):
+            for y in range(self.height):
+                coord.append((x, y))
+        coord = sample(coord, n)
+        for i in range(n):
+            self.add_obstacle(
+                coord[i][0], coord[i][1], Obstacle(coord[0], coord[1], "red"))
+
+    def setup_balls(self, n):
+        """
+        Place un nombre défini de billes dans la grille à une position aléatoire unique.
+
+        Args:
+            n (int): Le nombre de billes à ajouter.
+        """
+        ...
 
     def add_obstacle(self, x: int, y: int, obstacle: object) -> None:
         """

@@ -1,11 +1,12 @@
 from src.controllers.game_controller import GameController
-from src.models.grid_model import Grid
 from src.views.game_view import GameView
+from src.models.grid_model import Grid
 
 GRID_WIDTH = 50
 GRID_HEIGHT = 50
 NUM_OBSTACLES = 100
 NUM_BALLS = 1
+SIZE = 10
 
 
 def main():
@@ -14,10 +15,9 @@ def main():
     Cette fonction configure les composants du modèle, de la vue et du contrôleur,
     puis démarre la simulation.
     """
-    grid = Grid(GRID_WIDTH, GRID_HEIGHT)
-    gui = GameView(grid, 10)
-    controller = GameController(grid, gui, NUM_OBSTACLES, NUM_BALLS)
-    controller.start_round()
+    grid = Grid(GRID_WIDTH, GRID_HEIGHT, NUM_OBSTACLES, NUM_BALLS)
+    gui = GameView(grid, SIZE)
+    controller = GameController(grid, gui)
     gui.window.attendreClic()
     gui.window.fermerFenetre()
 

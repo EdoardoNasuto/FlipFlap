@@ -1,7 +1,5 @@
 from src.views.game_view import GameView
 from src.models.grid_model import Grid
-from src.models.obstacle_model import Obstacle
-from random import sample
 
 
 class GameController:
@@ -13,46 +11,16 @@ class GameController:
         view (GUI): L'interface graphique pour afficher la simulation.
     """
 
-    def __init__(self, grid: Grid, gui: GameView, num_obsctacles: int, num_balls: int):
+    def __init__(self, grid: Grid, gui: GameView):
         """
         Initialise le contrôleur avec une grille, une vue, et configure les obstacles et billes.
 
         Args:
             grid (Grid): L'instance de la grille utilisée pour la simulation.
             gui (GameView): L'interface graphique pour la simulation.
-            num_obstacles (int): Le nombre d'obstacles à placer dans la grille.
-            num_balls (int): Le nombre de billes à ajouter dans la grille.
         """
         self.model = grid
         self.view = gui
-        self.setup_obstacles(num_obsctacles)
-        self.setup_balls(num_balls)
-
-    def setup_obstacles(self, n):
-        """
-        Ajoute un nombre défini d'obstacles dans la grille pour interagir avec les billes.
-
-        Args:
-            n (int): Le nombre d'obstacles à ajouter.
-        """
-        coord = []
-        for x in range(self.model.width):
-            for y in range(self.model.height):
-                coord.append((x, y))
-        coord = sample(coord, n)
-        for i in range(n):
-            self.model.add_obstacle(
-                coord[i][0], coord[i][1], Obstacle(coord[0], coord[1], "red"))
-        self.view.create_obstacle()
-
-    def setup_balls(self, n):
-        """
-        Place un nombre défini de billes dans la grille pour démarrer la simulation.
-
-        Args:
-            n (int): Le nombre de billes à ajouter.
-        """
-        ...
 
     def start_round(self):
         """
