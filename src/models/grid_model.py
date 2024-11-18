@@ -26,6 +26,7 @@ class Grid:
         self.grid = [[0 for _ in range(self.columns)]
                      for _ in range(self.lines)]
         self.balls = []
+        self.colors = ["red", "blue", "green"]
         self.setup_obstacles(num_obstacles)
         self.setup_balls(num_balls)
 
@@ -42,7 +43,8 @@ class Grid:
                 coord.append((x, y))
         coord = sample(coord, n)
         for i in range(n):
-            self.add_obstacle(coord[i][0], coord[i][1], "red")
+            color = self.colors[i % len(self.colors)]
+            self.add_obstacle(coord[i][0], coord[i][1], color)
 
     def setup_balls(self, n):
         """
