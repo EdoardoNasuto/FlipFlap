@@ -37,13 +37,12 @@ class Grid:
             n (int): Le nombre d'obstacles à ajouter.
         """
         coord = []
-        for line in range(self.lines):
-            for column in range(self.columns):
-                coord.append((line, column))
+        for x in range(self.columns):
+            for y in range(self.lines):
+                coord.append((x, y))
         coord = sample(coord, n)
         for i in range(n):
-            self.add_obstacle(
-                coord[i][0], coord[i][1], Obstacle(coord[0], coord[1], "red"))
+            self.add_obstacle(coord[i][0], coord[i][1], "red")
 
     def setup_balls(self, n):
         """
@@ -54,16 +53,16 @@ class Grid:
         """
         ...
 
-    def add_obstacle(self, x: int, y: int, obstacle: object) -> None:
+    def add_obstacle(self, x: int, y: int, color: str) -> None:
         """
         Ajoute un obstacle à la grille à la position (x, y).
 
         Args:
             x (int): La position en x de l'obstacle.
             y (int): La position en y de l'obstacle.
-            obstacle (object): L'obstacle à ajouter à la grille.
+            color (str): La couleur de l'obstacle.
         """
-        self.grid[x][y] = obstacle
+        self.grid[y][x] = Obstacle(x, y, color)
 
     def add_ball(self, ball: object) -> None:
         """Ajoute une bille à la grille.

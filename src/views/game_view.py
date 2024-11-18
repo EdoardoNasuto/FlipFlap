@@ -41,8 +41,8 @@ class GameView:
         """
         Dessine les obstacles sur la grille
         """
-        for line in range(self.model.lines):
-            for column in range(self.model.columns):
+        for column in range(self.model.columns):
+            for line in range(self.model.lines):
                 if self.model.grid[line][column] != 0:
                     self.window.dessinerRectangle(
                         column*self.size+1, line*self.size+1, self.size-2, self.size-2,
