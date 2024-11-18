@@ -13,7 +13,7 @@ class Grid:
         balls (list): La liste des billes ajoutées à la grille.
     """
 
-    def __init__(self, width: int, height: int, num_obstacles: int, num_balls: int):
+    def __init__(self, num_lines: int, num_columns: int, num_obstacles: int, num_balls: int):
         """
         Initialise une grille de jeu avec la largeur et la hauteur.
 
@@ -21,9 +21,10 @@ class Grid:
             width (int): La largeur de la grille.
             height (int): La hauteur de la grille.
         """
-        self.width = width
-        self.height = height
-        self.grid = [[0 for _ in range(width)] for _ in range(height)]
+        self.lines = num_lines
+        self.columns = num_columns
+        self.grid = [[0 for _ in range(self.columns)]
+                     for _ in range(self.lines)]
         self.balls = []
         self.setup_obstacles(num_obstacles)
         self.setup_balls(num_balls)
@@ -36,9 +37,9 @@ class Grid:
             n (int): Le nombre d'obstacles à ajouter.
         """
         coord = []
-        for x in range(self.height):
-            for y in range(self.width):
-                coord.append((x, y))
+        for line in range(self.lines):
+            for column in range(self.columns):
+                coord.append((line, column))
         coord = sample(coord, n)
         for i in range(n):
             self.add_obstacle(
@@ -82,7 +83,7 @@ class Grid:
         Returns:
             bool: True si la position est valide, sinon False.
         """
-        if 0 <= x < self.height and 0 <= y < self.width:
+        if 0 <= x < self.columns and 0 <= y < self.lines:
             return True
         return False
 
