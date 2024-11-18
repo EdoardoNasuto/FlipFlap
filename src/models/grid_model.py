@@ -36,8 +36,8 @@ class Grid:
             n (int): Le nombre d'obstacles à ajouter.
         """
         coord = []
-        for x in range(self.width):
-            for y in range(self.height):
+        for x in range(self.height):
+            for y in range(self.width):
                 coord.append((x, y))
         coord = sample(coord, n)
         for i in range(n):
@@ -82,7 +82,7 @@ class Grid:
         Returns:
             bool: True si la position est valide, sinon False.
         """
-        if 0 <= x < self.width and 0 <= x < self.width:
+        if 0 <= x < self.height and 0 <= y < self.width:
             return True
         return False
 
