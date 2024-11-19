@@ -52,7 +52,12 @@ class GameView:
         """
         Dessine les billes sur la grille
         """
-        ...
+        for ball in self.model.balls:
+            # coordonnés et rayon du disque
+            print(ball.x, ball.y)
+            r = self.size/2
+            self.window.dessinerDisque(
+                ball.x*self.size+r, ball.y*self.size+r, r-1, "white")
 
     def update_ball(self, x1: int, y1: int, x2: int, y2: int) -> None:
         """

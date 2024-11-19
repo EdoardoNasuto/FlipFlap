@@ -1,5 +1,6 @@
 from random import sample
 from src.models.obstacle_model import Obstacle
+from src.models.ball_model import Ball
 
 
 class Grid:
@@ -27,8 +28,11 @@ class Grid:
                      for _ in range(self.lines)]
         self.balls = []
         self.colors = ["red", "blue", "green"]
-        self.setup_obstacles(num_obstacles)
-        self.setup_balls(num_balls)
+        self.direction = ["right", "left", "up", "down"]
+        # appelle la fonction qui crée les obtacles
+        self.setup_obstacles(n=num_obstacles)
+        # appelle la fonction qui crée les balles
+        self.setup_balls(n=num_balls)
 
     def setup_obstacles(self, n):
         """
@@ -41,8 +45,10 @@ class Grid:
         for x in range(self.columns):
             for y in range(self.lines):
                 coord.append((x, y))
+        # fonction random qui permet de tirer au hasard à l'intérieur de cette liste un nbr n d'élément EX : Si ya 100 obstacles il va piocher 100 coordonnées
         coord = sample(coord, n)
         for i in range(n):
+            # permet d'avoir un meme nombre de carré pour chaque couleur
             color = self.colors[i % len(self.colors)]
             self.add_obstacle(coord[i][0], coord[i][1], color)
 
@@ -53,7 +59,14 @@ class Grid:
         Args:
             n (int): Le nombre de billes à ajouter.
         """
-        ...
+        coord = []
+        for x in range(self.columns):
+            for y in range(self.lines):
+                coord.append((x, y))
+        coord = sample(coord, n)
+        for i in range(n):
+            direction = self.direction[i % len(self.direction)]
+            self.add_ball(coord[i][0], coord[i][1], direction)
 
     def add_obstacle(self, x: int, y: int, color: str) -> None:
         """
@@ -66,13 +79,13 @@ class Grid:
         """
         self.grid[y][x] = Obstacle(x, y, color)
 
-    def add_ball(self, ball: object) -> None:
+    def add_ball(self, x: int,  y: int, direction: str) -> None:
         """Ajoute une bille à la grille.
 
         Args:
             ball (object): La bille à ajouter à la grille.
         """
-        self.balls.append(ball)
+        self.balls.append(Ball(x, y, direction))
 
     def is_valid_position(self, x: int, y: int) -> bool:
         """Vérifie si la position (x, y) est valide (dans les limites de la grille).
