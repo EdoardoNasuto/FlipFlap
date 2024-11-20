@@ -21,6 +21,7 @@ class GameController:
         """
         self.model = grid
         self.view = gui
+        self.start_game()
 
     def start_game(self):
         from time import sleep
@@ -30,7 +31,6 @@ class GameController:
             sleep(1)
             self.run_round()
             self.view.window.actualiser()
-        print("test")
         self.view.window.attendreClic()
         self.view.window.fermerFenetre()
 
