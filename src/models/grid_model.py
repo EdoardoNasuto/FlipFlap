@@ -28,7 +28,7 @@ class Grid:
                      for _ in range(self.lines)]
         self.balls = []
         self.colors = ["red", "blue", "green"]
-        self.direction = ["right", "left", "up", "down"]
+        self.direction = ["left", "up", "right", "down"]
         # appelle la fonction qui crée les obtacles
         self.setup_obstacles(n=num_obstacles)
         # appelle la fonction qui crée les balles

@@ -54,12 +54,13 @@ class GameView:
         """
         for ball in self.model.balls:
             # coordonnés et rayon du disque
-            print(ball.x, ball.y)
             r = self.size/2
-            self.window.dessinerDisque(
+            ball.object_view = self.window.dessinerDisque(
                 ball.x*self.size+r, ball.y*self.size+r, r-1, "white")
+            # self.update_ball(ball.x, ball.y, ball.x +
+            # self.size, ball.y+self.size)
 
-    def update_ball(self, x1: int, y1: int, x2: int, y2: int) -> None:
+    def update_ball(self, ball, x1: int, y1: int, x2: int, y2: int) -> None:
         """
         Déplace la bille de sa position actuelle `(x1, y1)` vers sa nouvelle position `(x2, y2)` dans la grille.
 
@@ -69,4 +70,5 @@ class GameView:
             x2 (int): Coordonnée x de la nouvelle position de la bille.
             y2 (int): Coordonnée y de la nouvelle position de la bille.
         """
-        ...
+        self.window.deplacer(ball, x2*self.size-x1 *
+                             self.size, y2*self.size-y1*self.size)
