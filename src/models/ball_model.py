@@ -3,19 +3,22 @@ class Ball:
     Représente une bille se déplaçant dans une grille.
 
     Attributes:
-        x (int): La position en x de la bille
-        y (int): La position en y de la bille
-        direction (str): La direction de la bille
+        x (int): La position actuelle en x de la bille.
+        y (int): La position actuelle en y de la bille.
+        directions (list): Les directions valides que la bille peut prendre.
+        direction (str): La direction actuelle de la bille parmi {directions}.
+        object_view (Any): L'objet graphique représentant la bille.
     """
+    directions = ["left", "up", "right", "down"]
 
     def __init__(self, x: int, y: int, direction: str):
         """
-        Initialise une bille à la position (x, y) avec une direction spécifiée.
+        Initialise une bille avec une position initiale et une direction.
 
-        Attributes:
-            x (int): La position en x de la bille
-            y (int): La position en y de la bille
-            direction (str): La direction de la bille
+        Args:
+            x (int): Position x initiale.
+            y (int): Position y initiale.
+            direction (str): Direction initiale.
         """
         self.x = x
         self.y = y
@@ -24,44 +27,27 @@ class Ball:
 
     def move(self) -> None:
         """Déplace la bille en fonction de sa direction."""
-        if self.direction == "left":
-            self.x += -1
-        if self.direction == "right":
-            self.x += 1
-        if self.direction == "up":
-            self.y += -1
-        if self.direction == "down":
-            self.y += 1
+        moves = {
+            "left": (-1, 0),
+            "right": (1, 0),
+            "up": (0, -1),
+            "down": (0, 1)
+        }
+        dx, dy = moves[self.direction]
+        self.x += dx
+        self.y += dy
 
     def turn_left(self) -> None:
         """Tourne la bille en direction de la gauche."""
-        if self.direction == "left":
-            self.direction = "down"
-        elif self.direction == "right":
-            self.direction = "up"
-        elif self.direction == "up":
-            self.direction = "left"
-        elif self.direction == "down":
-            self.direction = "right"
+        index = self.directions.index(self.direction)
+        self.direction = self.directions[(index - 1) % 4]
 
     def turn_right(self) -> None:
-        """Tourne la bille en direction la droite."""
-        if self.direction == "left":
-            self.direction = "up"
-        elif self.direction == "right":
-            self.direction = "down"
-        elif self.direction == "up":
-            self.direction = "right"
-        elif self.direction == "down":
-            self.direction = "left"
+        """Tourne la bille en direction de la droite."""
+        index = self.directions.index(self.direction)
+        self.direction = self.directions[(index + 1) % 4]
 
     def reverse(self) -> None:
-        """Fait faire demi-tour à la direction bille"""
-        if self.direction == "left":
-            self.direction = "right"
-        elif self.direction == "right":
-            self.direction = "left"
-        elif self.direction == "up":
-            self.direction = "down"
-        elif self.direction == "down":
-            self.direction = "down"
+        """Fait faire demi-tour à la direction bille."""
+        index = self.directions.index(self.direction)
+        self.direction = self.directions[(index + 2) % 4]
