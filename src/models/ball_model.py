@@ -3,13 +3,13 @@ class Ball:
     Représente une bille se déplaçant dans une grille.
 
     Attributes:
+        available_directions (list): Les directions que la bille peut prendre.
         x (int): La position actuelle en x de la bille.
         y (int): La position actuelle en y de la bille.
-        directions (list): Les directions valides que la bille peut prendre.
         direction (str): La direction actuelle de la bille parmi {directions}.
         object_view (Any): L'objet graphique représentant la bille.
     """
-    directions = ["left", "up", "right", "down"]
+    available_directions = ["left", "up", "right", "down"]
 
     def __init__(self, x: int, y: int, direction: str):
         """
@@ -39,15 +39,15 @@ class Ball:
 
     def turn_left(self) -> None:
         """Tourne la bille en direction de la gauche."""
-        index = self.directions.index(self.direction)
-        self.direction = self.directions[(index - 1) % 4]
+        index = self.available_directions.index(self.direction)
+        self.direction = self.available_directions[(index - 1) % 4]
 
     def turn_right(self) -> None:
         """Tourne la bille en direction de la droite."""
-        index = self.directions.index(self.direction)
-        self.direction = self.directions[(index + 1) % 4]
+        index = self.available_directions.index(self.direction)
+        self.direction = self.available_directions[(index + 1) % 4]
 
     def reverse(self) -> None:
         """Fait faire demi-tour à la direction bille."""
-        index = self.directions.index(self.direction)
-        self.direction = self.directions[(index + 2) % 4]
+        index = self.available_directions.index(self.direction)
+        self.direction = self.available_directions[(index + 2) % 4]

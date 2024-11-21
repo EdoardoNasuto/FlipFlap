@@ -1,6 +1,7 @@
 from random import sample
-from src.models.obstacle_model import Obstacle
+
 from src.models.ball_model import Ball
+from src.models.obstacle_model import Obstacle
 
 
 class Grid:
@@ -8,30 +9,32 @@ class Grid:
     Représente une grille de jeu avec des obstacles et des billes.
 
     Attributes:
-        width (int): La largeur de la grille.
-        height (int): La hauteur de la grille.
-        grid (list): La matrice représentant la grille.
-        balls (list): La liste des billes ajoutées à la grille.
+        num_rows (int): Le nombre de lignes (hauteur) de la grille.
+        num_columns (int): Le nombre de colonnes (largeur) de la grille.
+        grid (list): La matrice représentant la grille, chaque case peut contenir un obstacle ou être vide.
+        balls (list): La liste des billes présentes dans la grille.
+        obstacle_colors (list): Liste des couleurs possibles des obstacles.
+        available_directions (list): Liste des directions possibles des billes.
     """
 
-    def __init__(self, num_lines: int, num_columns: int, num_obstacles: int, num_balls: int):
+    def __init__(self, num_rows: int, num_columns: int, num_obstacles: int, num_balls: int):
         """
-        Initialise une grille de jeu avec la largeur et la hauteur.
+        Initialise une grille de jeu avec la largeur et la hauteur, en ajoutant des obstacles et des billes.
 
         Args:
-            width (int): La largeur de la grille.
-            height (int): La hauteur de la grille.
+            num_rows (int): Le nombre de lignes (hauteur) de la grille.
+            num_columns (int): Le nombre de colonnes (largeur) de la grille.
+            num_obstacles (int): Le nombre d'obstacles à placer dans la grille.
+            num_balls (int): Le nombre de billes à placer dans la grille.
         """
-        self.lines = num_lines
-        self.columns = num_columns
-        self.grid = [[0 for _ in range(self.columns)]
-                     for _ in range(self.lines)]
+        self.num_rows = num_rows
+        self.num_columns = num_columns
+        self.grid = [[None for _ in range(self.num_columns)]
+                     for _ in range(self.num_rows)]
         self.balls = []
-        self.colors = ["red", "blue", "green"]
-        self.direction = Ball.directions
-        # appelle la fonction qui crée les obtacles
+        self.obstacle_colors = Obstacle.available_colors
+        self.ball_directions = Ball.available_directions
         self.setup_obstacles(n=num_obstacles)
-        # appelle la fonction qui crée les balles
         self.setup_balls(n=num_balls)
 
     def setup_obstacles(self, n):
@@ -42,14 +45,14 @@ class Grid:
             n (int): Le nombre d'obstacles à ajouter.
         """
         coord = []
-        for x in range(self.columns):
-            for y in range(self.lines):
+        for x in range(self.num_columns):
+            for y in range(self.num_rows):
                 coord.append((x, y))
         # fonction random qui permet de tirer au hasard à l'intérieur de cette liste un nbr n d'élément EX : Si ya 100 obstacles il va piocher 100 coordonnées
         coord = sample(coord, n)
         for i in range(n):
             # permet d'avoir un meme nombre de carré pour chaque couleur
-            color = self.colors[i % len(self.colors)]
+            color = self.obstacle_colors[i % len(self.obstacle_colors)]
             self.add_obstacle(coord[i][0], coord[i][1], color)
 
     def setup_balls(self, n):
@@ -60,12 +63,13 @@ class Grid:
             n (int): Le nombre de billes à ajouter.
         """
         coord = []
-        for x in range(self.columns):
-            for y in range(self.lines):
+        for x in range(self.num_columns):
+            for y in range(self.num_rows):
                 coord.append((x, y))
         coord = sample(coord, n)
         for i in range(n):
-            direction = self.direction[i % len(self.direction)]
+            direction = self.ball_directions[i % len(
+                self.ball_directions)]
             self.add_ball(coord[i][0], coord[i][1], direction)
 
     def add_obstacle(self, x: int, y: int, color: str) -> None:
@@ -97,7 +101,7 @@ class Grid:
         Returns:
             bool: True si la position est valide, sinon False.
         """
-        if 0 <= x < self.columns and 0 <= y < self.lines:
+        if 0 <= x < self.num_columns and 0 <= y < self.num_rows:
             return True
         return False
 

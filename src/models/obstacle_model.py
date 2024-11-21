@@ -6,10 +6,12 @@ class Obstacle:
     Représente un obstacle sur la grille qui peut affecter les billes.
 
     Attributes:
+        available_colors (list): Les couleurs que l'obstacle peut prendre.
         x (int): La position en x de l'obstacle.
         y (int): La position en y de l'obstacle.
         color (str): La couleur de l'obstacle, déterminant son effet sur les billes.
     """
+    available_colors = ["red", "blue", "green"]
 
     def __init__(self, x: int, y: int, color: str):
         """

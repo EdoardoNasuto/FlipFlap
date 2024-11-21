@@ -19,7 +19,7 @@ class GameView:
             grid (object): La grille de la simulation, contenant les obstacles et les billes.
             size (int): La taille de chaque case de la grille, en pixels.
         """
-        self.window = ouvrirFenetre(grid.columns*size, grid.lines*size)
+        self.window = ouvrirFenetre(grid.num_columns*size, grid.num_rows*size)
         self.model = grid
         self.size = size
         self.create_grid()
@@ -30,20 +30,20 @@ class GameView:
         """
         Dessine les cases de la grille.
         """
-        for x in range(0, self.model.columns):
+        for x in range(0, self.model.num_columns):
             self.window.dessinerLigne(
-                x*self.size, 0, x*self.size, self.model.lines*self.size,  "white")
-        for y in range(0, self.model.lines):
+                x*self.size, 0, x*self.size, self.model.num_rows*self.size,  "white")
+        for y in range(0, self.model.num_rows):
             self.window.dessinerLigne(
-                0, y*self.size, self.model.columns*self.size, y*self.size,  "white")
+                0, y*self.size, self.model.num_columns*self.size, y*self.size,  "white")
 
     def create_obstacle(self) -> None:
         """
         Dessine les obstacles sur la grille
         """
-        for column in range(self.model.columns):
-            for line in range(self.model.lines):
-                if self.model.grid[line][column] != 0:
+        for column in range(self.model.num_columns):
+            for line in range(self.model.num_rows):
+                if self.model.grid[line][column]:
                     self.window.dessinerRectangle(
                         column*self.size+1, line*self.size+1, self.size-2, self.size-2,
                         self.model.grid[line][column].color)

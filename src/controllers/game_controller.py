@@ -45,7 +45,7 @@ class GameController:
             if self.model.is_valid_position(ball.x, ball.y) == True:
                 self.view.update_ball(ball.object_view, x1, y1, ball.x, ball.y)
                 obstacle = self.model.grid[ball.y][ball.x]
-                if obstacle != 0:
+                if obstacle:
                     obstacle.affect_ball(ball)
             else:
                 for i in range(len(self.model.balls)):
