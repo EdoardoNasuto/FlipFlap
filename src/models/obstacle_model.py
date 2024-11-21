@@ -10,6 +10,7 @@ class Obstacle:
         x (int): La position en x de l'obstacle.
         y (int): La position en y de l'obstacle.
         color (str): La couleur de l'obstacle, déterminant son effet sur les billes.
+        object_view (Any): L'objet graphique représentant l'obstacle.
     """
     available_colors = ["red", "blue", "green"]
 
@@ -25,6 +26,7 @@ class Obstacle:
         self.x = x
         self.y = y
         self.color = color
+        self.object_view = None
 
     def affect_ball(self, ball: Ball) -> None:
         """

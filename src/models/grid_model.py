@@ -67,7 +67,7 @@ class Grid:
 
     def _setup_balls(self, n, coords):
         """
-        Place un nombre défini de billes dans la grille à des positions uniques.
+        Place un nombre défini de billes dans la grille.
 
         Args:
             n (int): Le nombre de billes à ajouter.
@@ -90,22 +90,32 @@ class Grid:
         self.grid[y][x] = Obstacle(x, y, color)
 
     def add_ball(self, x: int,  y: int, direction: str) -> None:
-        """Ajoute une bille à la grille.
+        """
+        Ajoute une bille à la grille.
 
         Args:
             x (int): La position en x de la bille.
             y (int): La position en y de la bille.
-            direction (str): La direction de l'obstacle.
+            direction (str): la direction de la bille.
         """
         self.balls.append(Ball(x, y, direction))
 
-    def is_valid_position(self, x: int, y: int) -> bool:
+    def remove_ball(self, ball):
         """
-        Vérifie si la position (x, y) est valide (dans les limites de la grille).
+        Supprime une bille de la grille.
 
         Args:
-            x (int): La position en x.
-            y (int): La position en y.
+            ball: L'objet représentant la bille à supprimer.
+        """
+        self.balls.remove(ball)
+
+    def is_valid_position(self, x: int, y: int) -> bool:
+        """
+        Vérifie si la position(x, y) est valide(dans les limites de la grille).
+
+        Args:
+            x(int): La position en x.
+            y(int): La position en y.
 
         Returns:
             bool: True si la position est valide, sinon False.
@@ -114,10 +124,10 @@ class Grid:
 
     def display(self) -> str:
         """ Affiche la grille avec les obstacles et billes pour le débogage. """
-        for line in self.grid:
-            for element in line:
+        for row in self.grid:
+            for element in row:
                 if element:
                     print(str(element.color).center(10), end="|")
                 else:
                     print("".center(10), end="|")
-            print(), print("-"*11*len(line))
+            print(), print("-"*11*len(row))

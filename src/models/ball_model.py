@@ -6,7 +6,7 @@ class Ball:
         available_directions (list): Les directions que la bille peut prendre.
         x (int): La position actuelle en x de la bille.
         y (int): La position actuelle en y de la bille.
-        direction (str): La direction actuelle de la bille parmi {directions}.
+        direction (str): La direction actuelle de la bille parmi 'available_directions'.
         object_view (Any): L'objet graphique représentant la bille.
     """
     available_directions = ["left", "up", "right", "down"]
