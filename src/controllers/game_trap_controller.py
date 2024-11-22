@@ -39,7 +39,6 @@ class GameTrapController:
 
     def run_round(self):
         """ Lance un round de simulation dans laquelle les billes interagissent avec les obstacles et se déplacent sur la grille. """
-        print(self.change_obstacle_color)
         for obstacle in self.change_obstacle_color:
             obstacle.color = choice(self.model.obstacle_colors)
             self.view.update_obstacle_color(
@@ -58,3 +57,9 @@ class GameTrapController:
             else:
                 self.view.remove_ball(ball.object_view)
                 self.model.remove_ball(ball)
+            clic = self.view.recup_clic()
+            if clic:
+                obstacle = self.model.grid[clic.y //
+                                           self.view.size][clic.x//self.view.size]
+                if obstacle and obstacle not in self.change_obstacle_color:
+                    self.change_obstacle_color.append(obstacle)
