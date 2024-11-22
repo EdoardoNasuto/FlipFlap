@@ -1,10 +1,11 @@
 from time import sleep
+from random import choice
 
 from src.views.game_view import GameView
 from src.models.grid_model import Grid
 
 
-class GameController:
+class GameTrapController:
     """
     Gère la logique de contrôle pour la simulation, incluant la grille, les obstacles, les billes et l'interface graphique.
 
@@ -25,6 +26,7 @@ class GameController:
         self.model = grid
         self.view = gui
         self.speed = speed
+        self.change_obstacle_color = []
         self.start_game()
 
     def start_game(self):
@@ -37,6 +39,12 @@ class GameController:
 
     def run_round(self):
         """ Lance un round de simulation dans laquelle les billes interagissent avec les obstacles et se déplacent sur la grille. """
+        print(self.change_obstacle_color)
+        for obstacle in self.change_obstacle_color:
+            obstacle.color = choice(self.model.obstacle_colors)
+            self.view.update_obstacle_color(
+                obstacle.object_view, obstacle.color)
+        self.change_obstacle_color = []
         balls = list(self.model.balls)  # Prendre la liste et pas la variable
         for ball in balls:
             x1, y1 = ball.x, ball.y
@@ -44,7 +52,9 @@ class GameController:
             if self.model.is_valid_position(ball.x, ball.y):
                 self.view.update_ball(ball.object_view, x1, y1, ball.x, ball.y)
                 obstacle = self.model.grid[ball.y][ball.x]
-                obstacle.affect_ball(ball) if obstacle else ...
+                if obstacle:
+                    obstacle.affect_ball(ball)
+                    self.change_obstacle_color.append(obstacle)
             else:
                 self.view.remove_ball(ball.object_view)
                 self.model.remove_ball(ball)

@@ -62,6 +62,9 @@ class GameView:
             self.model.grid[row][column].color
         )
 
+    def update_obstacle_color(self, obstacle: object, color: str):
+        self.window.changerCouleur(obstacle, color)
+
     def _create_balls(self) -> None:
         """ Dessine toutes les billes sur la grille. """
         for ball in self.model.balls:
