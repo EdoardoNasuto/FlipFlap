@@ -1,5 +1,4 @@
-from src.controllers.game_base_controller import GameBaseController
-from src.controllers.game_trap_controller import GameTrapController
+from src.controllers.game_controller import GameController
 from src.views.game_view import GameView
 from src.models.grid_model import Grid
 
@@ -17,8 +16,8 @@ def main():
     puis démarre la simulation.
     """
     grid = Grid(GRID_NUM_ROWS, GRID_NUM_COLUMNS, NUM_OBSTACLES, NUM_BALLS)
-    gui = GameView(grid, SIZE)
-    GameTrapController(grid, gui, 1)
+    gui = GameView(GRID_NUM_ROWS, GRID_NUM_COLUMNS, SIZE)
+    GameController(grid, gui, 1)
 
 
 if __name__ == "__main__":

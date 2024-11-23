@@ -1,5 +1,4 @@
 from src.views.libs.tkiteasy import *
-from src.models.grid_model import Grid
 
 
 class GameView:
@@ -12,77 +11,82 @@ class GameView:
         size (int): La taille de chaque case de la grille, en pixels.
     """
 
-    def __init__(self, grid: Grid, size: int):
+    def __init__(self, num_rows: int, num_columns: int, size: int):
         """
         Initialise l'interface graphique avec une grille et une taille de case spécifiée.
 
         Crée la fenêtre de la simulation en fonction des dimensions de la grille et attend un clic pour démarrer.
 
         Args:
-            grid (Grid): La grille de la simulation, contenant les obstacles et les billes.
+            num_rows (int): Le nombre de lignes de la grille.
+            num_columns (int): Le nombre de colonnes de la grille.
             size (int): La taille de chaque case de la grille, en pixels.
         """
-        self.window = ouvrirFenetre(grid.num_columns*size, grid.num_rows*size)
-        self.model = grid
+        self.window = ouvrirFenetre(num_columns*size, num_rows*size)
+        self.height = num_rows * size
+        self.width = num_columns * size
         self.size = size
-        self._create_grid()
-        self._create_obstacles()
-        self._create_balls()
-        self.window.actualiser()
 
-    def _create_grid(self) -> None:
+    def draw_grid(self, num_rows: int, num_columns: int) -> None:
         """
         Dessine les cases de la grille.
+
+        Args:
+            num_rows (int): Le nombre de lignes de la grille.
+            num_columns (int): Le nombre de colonnes de la grille.
         """
-        for x in range(0, self.model.num_columns):
+        for x in range(num_columns):
             self.window.dessinerLigne(
-                x*self.size, 0, x*self.size, self.model.num_rows*self.size,  "white")
-        for y in range(0, self.model.num_rows):
+                x*self.size, 0, x*self.size, self.height, "white")
+        for y in range(num_rows):
             self.window.dessinerLigne(
-                0, y*self.size, self.model.num_columns*self.size, y*self.size,  "white")
+                0, y*self.size, self.width, y*self.size, "white")
 
-    def _create_obstacles(self) -> None:
-        """ Dessine tout les obstacles de la grille """
-        for column in range(self.model.num_columns):
-            for row in range(self.model.num_rows):
-                if self.model.grid[row][column]:
-                    self._draw_obstacle(column, row)
-
-    def _draw_obstacle(self, column: int, row: int) -> None:
+    def draw_obstacle(self, column: int, row: int, color: str) -> None:
         """
         Dessine un obstacle à une position donnée sur la grille.
 
         Args:
             column (int): La colonne où dessiner l'obstacle.
             row (int): La ligne où dessiner l'obstacle.
+            color (str): La couleur de l'obstacle à dessiner.
         """
-        self.model.grid[row][column].object_view = self.window.dessinerRectangle(
-            column * self.size + 1, row * self.size + 1,
-            self.size - 1, self.size - 1,
-            self.model.grid[row][column].color
+        return self.window.dessinerRectangle(
+            column * self.size, row * self.size,
+            self.size, self.size, color
         )
 
     def update_obstacle_color(self, obstacle: object, color: str):
+        """
+        Met à jour la couleur d'un obstacle.
+
+        Args:
+            obstacle (object): L'objet représentant l'obstacle.
+            color (str): La nouvelle couleur de l'obstacle.
+        """
         self.window.changerCouleur(obstacle, color)
 
     def recup_clic(self):
+        """
+        Récupère le clic de l'utilisateur.
+
+        Returns:
+            tuple: La position du clic de l'utilisateur sous forme de coordonnées (x, y).
+        """
         return self.window.recupererClic()
 
-    def _create_balls(self) -> None:
-        """ Dessine toutes les billes sur la grille. """
-        for ball in self.model.balls:
-            self._draw_ball(ball)
-
-    def _draw_ball(self, ball: object) -> None:
+    def draw_ball(self, ball: object) -> object:
         """
         Dessine une bille sur la grille à sa position actuelle.
 
         Args:
             ball (object): L'objet représentant la bille à dessiner (attributs : `x`, `y`, `object_view`).
+
+        Returns:
+            object: L'objet graphique représentant la bille (généré par `self.window.dessinerDisque`).
         """
         r = self.size/2
-        ball.object_view = self.window.dessinerDisque(
-            ball.x*self.size+r, ball.y*self.size+r, r-1, "white")
+        return self.window.dessinerDisque(ball.x*self.size+r, ball.y*self.size+r, r-1, "white")
 
     def update_ball(self, ball: object, x1: int, y1: int, x2: int, y2: int) -> None:
         """
@@ -108,10 +112,14 @@ class GameView:
         self.window.supprimer(ball)
 
     def refresh(self) -> None:
-        """ Actualise l'affichage de la fenêtre graphique."""
+        """
+        Actualise l'affichage de la fenêtre graphique.
+        """
         self.window.actualiser()
 
     def exit_game(self) -> None:
-        """ Termine la simulation et ferme la fenêtre graphique après un clic de l'utilisateur. """
+        """
+        Termine la simulation et ferme la fenêtre graphique après un clic de l'utilisateur.
+        """
         self.window.attendreClic()
         self.window.fermerFenetre()

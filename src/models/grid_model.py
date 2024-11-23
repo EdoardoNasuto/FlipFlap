@@ -1,4 +1,5 @@
 from random import sample
+from typing import Optional, List
 
 from src.models.ball_model import Ball
 from src.models.obstacle_model import Obstacle
@@ -6,20 +7,23 @@ from src.models.obstacle_model import Obstacle
 
 class Grid:
     """
-    Représente une grille de jeu avec des obstacles et des billes.
+    Représente une grille de jeu contenant des obstacles et des billes. La grille est une matrice rectangulaire
+    où chaque case peut contenir un obstacle ou être vide. Les billes se déplacent selon des directions définies
+    dans la grille et interagissent avec les obstacles.
 
     Attributes:
         num_rows (int): Le nombre de lignes (hauteur) de la grille.
         num_columns (int): Le nombre de colonnes (largeur) de la grille.
-        grid (list): La matrice représentant la grille, chaque case peut contenir un obstacle ou être vide.
-        balls (list): La liste des billes présentes dans la grille.
-        obstacle_colors (list): Liste des couleurs possibles des obstacles.
-        ball_directions (list): Liste des directions possibles des billes.
+        grid (List[List[Optional[Obstacle]]]): La matrice représentant la grille, où chaque case contient 
+            soit un obstacle, soit `None` si elle est vide.
+        balls (List[Ball]): La liste des billes présentes dans la grille, avec leurs positions et directions.
+        obstacle_colors (List[str]): Liste des couleurs disponibles pour les obstacles, héritée de `Obstacle`.
+        ball_directions (List[str]): Liste des directions possibles pour les billes, héritée de `Ball`.
     """
 
     def __init__(self, num_rows: int, num_columns: int, num_obstacles: int, num_balls: int):
         """
-        Initialise une grille de jeu avec la largeur et la hauteur, en ajoutant des obstacles et des billes.
+        Initialise une grille de jeu avec un certain nombre de lignes, colonnes, obstacles, et billes.
 
         Args:
             num_rows (int): Le nombre de lignes (hauteur) de la grille.
@@ -29,9 +33,9 @@ class Grid:
         """
         self.num_rows = num_rows
         self.num_columns = num_columns
-        self.grid = [[None for _ in range(self.num_columns)]
-                     for _ in range(self.num_rows)]
-        self.balls = []
+        self.grid: List[List[Optional[Obstacle]]] = [[None for _ in range(self.num_columns)]
+                                                     for _ in range(self.num_rows)]
+        self.balls: List[Ball] = []
         self.obstacle_colors = Obstacle.available_colors
         self.ball_directions = Ball.available_directions
         self._setup(num_obstacles, num_balls)
@@ -123,7 +127,9 @@ class Grid:
         return 0 <= x < self.num_columns and 0 <= y < self.num_rows
 
     def display(self) -> str:
-        """ Affiche la grille avec les obstacles et billes pour le débogage. """
+        """
+        Affiche la grille avec les obstacles et billes pour le débogage.
+        """
         for row in self.grid:
             for element in row:
                 if element:
