@@ -19,5 +19,5 @@ def trap_game(game: GameController) -> None:
         for ball in list(game.model.balls):
             game.interact_with_obstacle(ball)
             if not game.update_ball_position(ball):
-                game.remove_ball(ball)
+                game.ball_traverse_board(ball)
             game.handle_user_input()

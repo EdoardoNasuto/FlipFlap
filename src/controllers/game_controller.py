@@ -130,7 +130,6 @@ class GameController:
         colors = list(self.model.obstacle_colors)
         colors.remove(obstacle.color)
         obstacle.color = choice(colors)
-        print("test")
         self.view.update_obstacle_color(obstacle.object_view, obstacle.color)
 
     def remove_ball(self, ball: Ball):
@@ -139,3 +138,13 @@ class GameController:
         """
         self.view.remove_ball(ball.object_view)
         self.model.remove_ball(ball)
+
+    def ball_traverse_board(self, ball: Ball):
+        """
+        Fait traverser la grille à la bille
+        """
+        x1, y1 = ball.x, ball.y
+        ball.traverse_board(self.model.num_columns-1, self.model.num_rows-1)
+        self.view.update_ball_position(
+            ball.object_view, x1, y1, ball.x, ball.y)
+        self.update_ball_direction(ball)

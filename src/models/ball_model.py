@@ -39,6 +39,21 @@ class Ball:
         self.x += dx
         self.y += dy
 
+    def traverse_board(self, max_x, max_y):
+        """
+        Permet à la bille de traverser le plateau en réapparaissant de l'autre côté.
+
+        Args:
+            max_x (int): Le valeur max de x sur la grille.
+            max_y (int): Le valeur max de y sur la grille.
+        """
+        self.move()
+        if not (0 <= self.x <= max_x):
+            self.x = self.x % (max_x + 1)
+
+        if not (0 <= self.y <= max_y):
+            self.y = self.y % (max_y + 1)
+
     def turn_left(self) -> None:
         """Tourne la bille en direction de la gauche."""
         index = self.available_directions.index(self.direction)
