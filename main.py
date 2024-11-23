@@ -17,7 +17,7 @@ def main():
     """
     grid = Grid(GRID_NUM_ROWS, GRID_NUM_COLUMNS, NUM_OBSTACLES, NUM_BALLS)
     gui = GameView(GRID_NUM_ROWS, GRID_NUM_COLUMNS, SIZE)
-    GameController(grid, gui, 1)
+    GameController(grid, gui, 1, "trap")
 
 
 if __name__ == "__main__":

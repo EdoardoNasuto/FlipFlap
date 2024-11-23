@@ -25,7 +25,7 @@ class Ball:
         self.direction = direction
         self.object_view = None
 
-    def move(self) -> None:
+    def move(self, test: bool = False) -> None:
         """Déplace la bille en fonction de sa direction."""
         moves = {
             "left": (-1, 0),
@@ -34,6 +34,8 @@ class Ball:
             "down": (0, 1)
         }
         dx, dy = moves[self.direction]
+        if test:
+            return dx, dy
         self.x += dx
         self.y += dy
 

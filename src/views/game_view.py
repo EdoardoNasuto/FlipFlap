@@ -88,7 +88,7 @@ class GameView:
         r = self.size/2
         return self.window.dessinerDisque(ball.x*self.size+r, ball.y*self.size+r, r-1, "white")
 
-    def update_ball(self, ball: object, x1: int, y1: int, x2: int, y2: int) -> None:
+    def update_ball_position(self, ball: object, x1: int, y1: int, x2: int, y2: int) -> None:
         """
         Déplace la bille de sa position actuelle `(x1, y1)` vers sa nouvelle position `(x2, y2)` dans la grille.
 
