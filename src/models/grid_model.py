@@ -1,4 +1,3 @@
-from random import sample
 from typing import Optional, List
 
 from src.models.ball_model import Ball
@@ -21,7 +20,7 @@ class Grid:
         ball_directions (List[str]): Liste des directions possibles pour les billes, héritée de `Ball`.
     """
 
-    def __init__(self, num_rows: int, num_columns: int, num_obstacles: int, num_balls: int):
+    def __init__(self, num_rows: int, num_columns: int):
         """
         Initialise une grille de jeu avec un certain nombre de lignes, colonnes, obstacles, et billes.
 
@@ -38,53 +37,6 @@ class Grid:
         self.balls: List[Ball] = []
         self.obstacle_colors = Obstacle.available_colors
         self.ball_directions = Ball.available_directions
-        self._setup(num_obstacles, num_balls)
-
-    def _setup(self, num_obstacles, num_balls):
-        """
-        Méthode privée pour ajouter des obstacles et des billes dans la grille, à des positions aléatoires uniques.
-
-        Args:
-            num_obstacles (int): Le nombre d'obstacles à placer dans la grille.
-            num_balls (int): Le nombre de billes à placer dans la grille.
-        """
-        coords = [(x, y) for x in range(self.num_columns)
-                  for y in range(self.num_rows)]
-        # fonction random qui permet de tirer au hasard à l'intérieur de cette liste un nbr n d'élément EX :
-        # Si ya 100 obstacles il va piocher 100 coordonnées
-        coords = sample(coords, num_obstacles+num_balls)
-        self._setup_obstacles(num_obstacles, coords[:num_obstacles])
-        self._setup_balls(num_balls, coords[num_obstacles:])
-
-    def _setup_obstacles(self, n, coords):
-        """
-        Place un nombre défini d'obstacles dans la grille à des positions uniques.
-
-        Args:
-            n (int): Le nombre d'obstacles à ajouter.
-            coords (list): Liste des coordonnées pour les obstacles.
-        """
-        weighted_colors = []
-        for color, weight in self.obstacle_colors.items():
-            # Calculer le nombre d'occurrences basées sur la fraction
-            count = round(weight * n)
-            weighted_colors.extend([color] * count)
-        for i in range(n):
-            color = weighted_colors[i]
-            self.add_obstacle(coords[i][0], coords[i][1], color)
-
-    def _setup_balls(self, n, coords):
-        """
-        Place un nombre défini de billes dans la grille.
-
-        Args:
-            n (int): Le nombre de billes à ajouter.
-            coords (list): Liste des coordonnées pour les billes.
-        """
-        for i in range(n):
-            direction = self.ball_directions[i % len(
-                self.ball_directions)]
-            self.add_ball(coords[i][0], coords[i][1], direction)
 
     def add_obstacle(self, x: int, y: int, color: str) -> None:
         """

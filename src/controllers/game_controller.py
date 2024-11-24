@@ -29,39 +29,8 @@ class GameController:
         self.view = gui
         self.speed = speed
         self.game_mode = game_mode
-        self.setup_obstacles()
-        self.setup_grid()
-        self.setup_balls()
         self.view.refresh()
         self.start_game()
-
-    # -- Setup Methods --
-
-    def setup_obstacles(self):
-        """
-        Dessine tout les obstacles de la grille
-        """
-        for column in range(self.model.num_columns):
-            for row in range(self.model.num_rows):
-                obstacle = self.model.grid[row][column]
-                if obstacle:
-                    obstacle.object_view = self.view.draw_obstacle(
-                        obstacle.x, obstacle.y, obstacle.color)
-
-    def setup_grid(self) -> None:
-        """
-        Dessine les cases de la grille.
-        """
-        self.view.draw_grid(self.model.num_rows, self.model.num_columns)
-
-    def setup_balls(self) -> None:
-        """
-        Dessine toutes les billes sur la grille.
-        """
-        for ball in self.model.balls:
-            ball.object_view = self.view.draw_ball(ball)
-
-    # -- Game Logic Methods --
 
     def start_game(self) -> None:
         """
