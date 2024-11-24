@@ -1,4 +1,4 @@
-from random import choice
+from random import choices
 
 from src.views.game_view import GameView
 from src.models.grid_model import Grid
@@ -81,7 +81,7 @@ class GameController:
             mode.trap_game(self)
         self.view.exit_game()
 
-    def update_ball_position(self, ball: Ball) -> bool:
+    def move_ball(self, ball: Ball) -> bool:
         """
         Met à jour la position d'une bille et interagit avec les obstacles.
         """
@@ -101,9 +101,10 @@ class GameController:
         """
         obstacle = self.model.grid[ball.y][ball.x]
         if obstacle:
-            obstacle.affect_ball(ball)
+            if obstacle.affect_ball(ball) == "delete":
+                self.remove_ball(ball)
 
-    def handle_user_input(self) -> None:
+    def change_obstacle_color_on_click(self) -> None:
         """
         Gère les entrées de l'utilisateur, comme les clics sur la grille.
         """
@@ -114,7 +115,7 @@ class GameController:
             if obstacle:
                 self.change_obstacle_color(obstacle)
 
-    def interact_with_obstacle(self, ball: Ball) -> None:
+    def change_obstacle_color_if_ball_present(self, ball: Ball) -> None:
         """
         Gère l'interaction entre une bille et un obstacle.
         """
@@ -127,10 +128,14 @@ class GameController:
         """
         Change la couleur d'un obstacle.
         """
-        colors = list(self.model.obstacle_colors)
-        colors.remove(obstacle.color)
-        obstacle.color = choice(colors)
-        self.view.update_obstacle_color(obstacle.object_view, obstacle.color)
+        colors = list(self.model.obstacle_colors.keys())
+        weights = list(self.model.obstacle_colors.values())
+        if obstacle.color in colors:
+            weights.pop(colors.index(obstacle.color))
+            colors.remove(obstacle.color)
+            obstacle.color = choices(colors, weights=weights, k=1)[0]
+            self.view.update_obstacle_color(
+                obstacle.object_view, obstacle.color)
 
     def remove_ball(self, ball: Ball):
         """

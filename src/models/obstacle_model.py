@@ -12,7 +12,7 @@ class Obstacle:
         color (str): La couleur de l'obstacle, déterminant son effet sur les billes.
         object_view (Any): L'objet graphique représentant l'obstacle.
     """
-    available_colors = ["red", "blue", "green"]
+    available_colors = {"red": 0.50, "blue": 0.30, "green": 0.20}
 
     def __init__(self, x: int, y: int, color: str):
         """
@@ -43,3 +43,6 @@ class Obstacle:
 
         elif self.color == "green":
             ball.reverse()
+
+        elif self.color == "white":
+            return "delete"

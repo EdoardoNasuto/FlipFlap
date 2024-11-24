@@ -64,9 +64,13 @@ class Grid:
             n (int): Le nombre d'obstacles à ajouter.
             coords (list): Liste des coordonnées pour les obstacles.
         """
+        weighted_colors = []
+        for color, weight in self.obstacle_colors.items():
+            # Calculer le nombre d'occurrences basées sur la fraction
+            count = round(weight * n)
+            weighted_colors.extend([color] * count)
         for i in range(n):
-            # permet d'avoir un meme nombre de carré pour chaque couleur
-            color = self.obstacle_colors[i % len(self.obstacle_colors)]
+            color = weighted_colors[i]
             self.add_obstacle(coords[i][0], coords[i][1], color)
 
     def _setup_balls(self, n, coords):
