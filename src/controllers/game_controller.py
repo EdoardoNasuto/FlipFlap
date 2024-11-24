@@ -1,4 +1,4 @@
-from random import choices
+from random import choice, choices
 
 from src.views.game_view import GameView
 from src.models.grid_model import Grid
@@ -104,7 +104,7 @@ class GameController:
             if obstacle.affect_ball(ball) == "delete":
                 self.remove_ball(ball)
 
-    def change_obstacle_color_on_click(self) -> None:
+    def change_obstacle_color_on_click(self, mode: str) -> None:
         """
         Gère les entrées de l'utilisateur, comme les clics sur la grille.
         """
@@ -113,27 +113,47 @@ class GameController:
             obstacle = self.model.grid[clic.y //
                                        self.view.size][clic.x // self.view.size]
             if obstacle:
-                self.change_obstacle_color(obstacle)
+                self._change_obstacle_color(obstacle, mode)
 
-    def change_obstacle_color_if_ball_present(self, ball: Ball) -> None:
+    def change_obstacle_color_if_ball_present(self, ball: Ball, mode=str) -> None:
         """
         Gère l'interaction entre une bille et un obstacle.
         """
         obstacle = self.model.grid[ball.y][ball.x]
         if obstacle:
             # Si la bille est en contact avec un obstacle, change la couleur
-            self.change_obstacle_color(obstacle)
+            self._change_obstacle_color(obstacle, mode)
 
-    def change_obstacle_color(self, obstacle: Obstacle) -> None:
+    def _change_obstacle_color(self, obstacle: Obstacle, mode: str = "sequential") -> None:
         """
         Change la couleur d'un obstacle.
         """
+
+        valid_modes = {"random", "weighted", "sequential"}
+        if mode not in valid_modes:
+            raise ValueError(
+                f"The mode must be one of the following values: {', '.join(valid_modes)}.")
+
         colors = list(self.model.obstacle_colors.keys())
-        weights = list(self.model.obstacle_colors.values())
+
         if obstacle.color in colors:
-            weights.pop(colors.index(obstacle.color))
-            colors.remove(obstacle.color)
-            obstacle.color = choices(colors, weights=weights, k=1)[0]
+            if mode == "random":
+                colors.remove(obstacle.color)
+                obstacle.color = choice(colors)
+
+            elif mode == "weighted":
+                weights = list(self.model.obstacle_colors.values())
+                weights.pop(colors.index(obstacle.color))
+                colors.remove(obstacle.color)
+                obstacle.color = choices(colors, weights=weights, k=1)[0]
+
+            elif mode == "sequential":
+                new_color = (colors.index(obstacle.color)+1) % len(colors)
+                print(colors)
+                print(obstacle.color)
+                obstacle.color = colors[new_color]
+                print(obstacle.color)
+
             self.view.update_obstacle_color(
                 obstacle.object_view, obstacle.color)
 

@@ -33,8 +33,8 @@ def trap_game(game: GameController) -> None:
     while game.model.balls:
         sleep(game.speed)
         for ball in list(game.model.balls):
-            game.change_obstacle_color_if_ball_present(ball)
+            game.change_obstacle_color_if_ball_present(ball, "random")
             if not game.move_ball(ball):
                 game.ball_traverse_board(ball)
-            game.change_obstacle_color_on_click()
+            game.change_obstacle_color_on_click("random")
         game.view.refresh()
