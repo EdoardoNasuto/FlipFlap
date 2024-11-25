@@ -4,7 +4,7 @@
 - [X] Des obstacles qui changent de couleur (mais ne devienent pas mortel) quand on les clique
 - [X] Les balles tranverses la grille et ne sorte jamis (comme snake)
 - [X] Ajout d'obstcles mortel (4 fois moins présent que les autres obstacles) qui tue la balle bien fort
-- [ ] Min un obstacle par ligne
+- [ ] Répartition équilibré des obstacles dans chaque ligne et colonne
 
 ## POULE RENARD VIPERE
 ### Phase 1

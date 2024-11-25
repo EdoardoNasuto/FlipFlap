@@ -1,8 +1,7 @@
-from random import sample
+from random import choice, choices, shuffle
 
 from src.models.grid_model import Grid
 from src.views.game_view import GameView
-import src.controllers.game_mode_controller as game_mode
 
 
 class SetupController:
@@ -37,20 +36,46 @@ class SetupController:
         self.setup()
 
     def setup(self):
+        import src.controllers.game_mode_controller as game_mode
         if self.game_mode == "trap":
             game_mode.trap_game_setup()
         self.setup_model()
         self.setup_view()
 
-    def setup_model(self):
+    def setup_model(self, random_obstacle: bool = False, random_balls: bool = False):
         self.model = Grid(self.num_rows, self.num_columns)
-        coords = [(x, y) for x in range(self.num_columns)
-                  for y in range(self.num_rows)]
-        # fonction random qui permet de tirer au hasard à l'intérieur de cette liste un nbr n d'élément EX :
-        # Si ya 100 obstacles il va piocher 100 coordonnées
-        coords = sample(coords, self.num_obstacles+self.num_balls)
-        self._setup_obstacles(self.num_obstacles, coords[:self.num_obstacles])
-        self._setup_balls(self.num_balls, coords[self.num_obstacles:])
+        coords_obstacle, coords_balls = self._setup_items_coords(
+            random_obstacle, random_balls)
+        self._setup_obstacles(self.num_obstacles, coords_obstacle)
+        self._setup_balls(self.num_balls, coords_balls)
+
+    def _setup_items_coords(self, random_obstacle, random_balls):
+        obstacles_coordinates, balls_coordinates = [], []
+        self.available_coords = [(x, y) for x in range(self.num_columns)
+                                 for y in range(self.num_rows)]
+
+        if random_obstacle:
+            obstacles_coordinates = choices(
+                self.available_coords, k=self.num_obstacles)
+            self.available_coords = [
+                coord for coord in self.available_coords if coord not in obstacles_coordinates]
+
+        elif not random_obstacle:
+            obstacles_coordinates.extend(self.select_coordinates_equally(
+                self.num_obstacles))
+
+        if random_balls:
+            balls_coordinates = choices(
+                self.available_coords, k=self.num_balls)
+            self.available_coords = [
+                coord for coord in self.available_coords if coord not in balls_coordinates]
+
+        elif not random_obstacle:
+            balls_coordinates.extend(self.select_coordinates_equally(
+                self.num_balls))
+
+        shuffle(obstacles_coordinates), shuffle(balls_coordinates)
+        return obstacles_coordinates, balls_coordinates
 
     def _setup_obstacles(self, n, coords):
         """
@@ -65,6 +90,11 @@ class SetupController:
             # Calculer le nombre d'occurrences basées sur la fraction
             count = round(weight * n)
             weighted_colors.extend([color] * count)
+
+        while len(weighted_colors) < self.num_obstacles:
+            weighted_colors.append(
+                choice(list(self.model.obstacle_colors.keys())))
+
         for i in range(n):
             color = weighted_colors[i]
             self.model.add_obstacle(coords[i][0], coords[i][1], color)
@@ -81,6 +111,69 @@ class SetupController:
             direction = self.model.ball_directions[i % len(
                 self.model.ball_directions)]
             self.model.add_ball(coords[i][0], coords[i][1], direction)
+
+    def select_coordinates_equally(self, n_items: int) -> list:
+        """
+        Sélectionne aléatoirement des coordonnées (x, y) dans une grille de manière à répartir
+        les items aussi équitablement que possible entre les colonnes.
+
+        Args :
+        - n_items (int) : Le nombre total d'items à placer sur la grille.
+
+        Return :
+        - result (list) : Une liste de tuples (x, y) représentant les coordonnées sélectionnées.
+
+        Attributs requis dans `self` :
+        - self.num_rows (int) : Le nombre de lignes dans la grille.
+        - self.num_columns (int) : Le nombre de colonnes dans la grille.
+        - self.available_coords (list) : Une liste des coordonnées disponibles sous forme de tuples (x, y).
+
+        Notes :
+        - Les colonnes sont sélectionnées aléatoirement en excluant celles déjà utilisées.
+        - Les coordonnées (x, y) sont sélectionnées aléatoirement parmi celles disponibles
+        dans une colonne donnée.
+        - Une réinitialisation temporaire de `available_y` est effectuée si toutes les lignes
+        d'une colonne ont déjà été utilisées.
+        """
+        selected_coordinates = []
+        used_x = []  # Liste des indices de colonnes déjà utilisées
+        # Liste des indices de lignes disponibles
+        available_y = [y for y in range(self.num_rows)]
+
+        # Calcul du nombre d'items par colonne
+        items_per_x = n_items // self.num_columns
+
+        # Reste des items non répartis uniformément
+        remaining_items = n_items % self.num_columns
+
+        for index in range(self.num_columns):
+            # Sélectionner une colonne x qui n'a pas encore été utilisée
+            x = choice([x for x in range(self.num_columns) if x not in used_x])
+            used_x.append(x)
+
+            # Ajouter un item supplémentaire pour les premières colonnes si nécessaire
+            if index < remaining_items:
+                items_per_x += 1
+
+            # Répartir les items dans la colonne sélectionnée
+            for _ in range(items_per_x):
+
+                # Si toutes les lignes de la colonne sont utilisées, réinitialiser available_y
+                if len(available_y) == 0:
+                    available_y = [y for y in range(self.num_rows)]
+
+                # Trouver toutes les coordonnées disponibles dans la colonne x
+                available_coords_in_x = [
+                    coord for coord in self.available_coords if coord[0] == x and coord[1] in available_y]
+                selected_coord = choice(available_coords_in_x)
+                available_y.remove(selected_coord[1])
+                self.available_coords.remove(selected_coord)
+                selected_coordinates.append(selected_coord)
+
+            # Réinitialiser items_for_x pour la prochaine colonne
+            items_per_x = n_items // self.num_columns
+
+        return selected_coordinates
 
     # -----------------------------------------------------
 
