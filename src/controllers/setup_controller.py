@@ -36,13 +36,13 @@ class SetupController:
         self.setup()
 
     def setup(self):
-        import src.controllers.game_mode_controller as game_mode
+        import src.rules.game_mode_rules as game_mode
         if self.game_mode == "trap":
-            game_mode.trap_game_setup()
-        self.setup_model()
-        self.setup_view()
+            game_mode.trap_game_setup(self)
+        elif self.game_mode == "base":
+            game_mode.trap_game_setup(self)
 
-    def setup_model(self, random_obstacle: bool = False, random_balls: bool = False):
+    def setup_model(self, random_obstacle: bool, random_balls: bool):
         self.model = Grid(self.num_rows, self.num_columns)
         coords_obstacle, coords_balls = self._setup_items_coords(
             random_obstacle, random_balls)

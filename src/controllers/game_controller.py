@@ -43,7 +43,7 @@ class GameController:
         Exécute les rounds du jeu, adapté au mode.
         """
         self.view.refresh()
-        import src.controllers.game_mode_controller as mode
+        import src.rules.game_mode_rules as mode
         if self.game_mode == "base":
             mode.base_game(self)
         elif self.game_mode == "trap":

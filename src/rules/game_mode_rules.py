@@ -1,11 +1,13 @@
 from time import sleep
 
 from src.controllers.game_controller import GameController
+from src.controllers.setup_controller import SetupController
 from src.models.obstacle_model import Obstacle
 
 
-def base_game_setup():
-    pass
+def base_game_setup(game: SetupController):
+    game.setup_model(random_obstacle=True, random_balls=True)
+    game.setup_view()
 
 
 def base_game(game: GameController) -> None:
@@ -20,9 +22,11 @@ def base_game(game: GameController) -> None:
         game.view.refresh()
 
 
-def trap_game_setup():
+def trap_game_setup(game: SetupController):
     Obstacle.available_colors = {"red": 0.40,
                                  "blue": 0.30, "green": 0.20, "white": 0.10}
+    game.setup_model(random_obstacle=True, random_balls=True)
+    game.setup_view()
 
 
 def trap_game(game: GameController) -> None:
