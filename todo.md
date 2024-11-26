@@ -8,7 +8,7 @@
 
 ## POULE RENARD VIPERE
 ### Phase 1
-- [ ] Ajout de case dédoublement
+- [ ] Ajout d'une case de dédoublement de bille
 - [ ] Ajout du système proie prédateur
 - [ ] Un joueur selectionne une équipe
 ###  Phase 2 (tour par tour)

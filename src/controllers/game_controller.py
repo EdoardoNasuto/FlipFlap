@@ -48,6 +48,8 @@ class GameController:
             mode.base_game(self)
         elif self.game_mode == "trap":
             mode.trap_game(self)
+        elif self.game_mode == "poule renard vipere":
+            mode.poule_renard_vipere_game(self)
         self.view.exit_game()
 
     def move_ball(self, ball: Ball) -> bool:
@@ -70,8 +72,11 @@ class GameController:
         """
         obstacle = self.model.grid[ball.y][ball.x]
         if obstacle:
-            if obstacle.affect_ball(ball) == "delete":
+            effect = obstacle.affect_ball(ball)
+            if effect == "delete":
                 self.remove_ball(ball)
+            elif effect == "new_ball":
+                ...
 
     def change_obstacle_color_on_click(self, mode: str) -> None:
         """

@@ -6,7 +6,7 @@ GRID_NUM_COLUMNS = 10
 NUM_OBSTACLES = 20
 NUM_BALLS = 10
 SIZE = 50
-MODE = "trap"
+MODE = "poule renard vipere"
 
 
 def main():

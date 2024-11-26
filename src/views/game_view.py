@@ -75,7 +75,7 @@ class GameView:
         """
         return self.window.recupererClic()
 
-    def draw_ball(self, ball: object) -> object:
+    def draw_ball(self, ball: object, file: str = None) -> object:
         """
         Dessine une bille sur la grille à sa position actuelle.
 
@@ -85,8 +85,11 @@ class GameView:
         Returns:
             object: L'objet graphique représentant la bille (généré par `self.window.dessinerDisque`).
         """
-        r = self.size/2
-        return self.window.dessinerDisque(ball.x*self.size+r, ball.y*self.size+r, r-1, "white")
+        if not file:
+            r = self.size/2
+            return self.window.dessinerDisque(ball.x*self.size+r, ball.y*self.size+r, r-1, "white")
+        elif file:
+            return self.window.afficherImage(ball.x*self.size, ball.y*self.size, file, self.size-1, self.size-1)
 
     def update_ball_position(self, ball: object, x1: int, y1: int, x2: int, y2: int) -> None:
         """

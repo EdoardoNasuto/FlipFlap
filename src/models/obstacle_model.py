@@ -46,3 +46,6 @@ class Obstacle:
 
         elif self.color == "white":
             return "delete"
+
+        elif self.color == "purple":
+            return "new_ball"

@@ -37,6 +37,7 @@ class Grid:
         self.balls: List[Ball] = []
         self.obstacle_colors = Obstacle.available_colors
         self.ball_directions = Ball.available_directions
+        self.ball_animals = Ball.available_animals
 
     def add_obstacle(self, x: int, y: int, color: str) -> None:
         """
@@ -49,7 +50,7 @@ class Grid:
         """
         self.grid[y][x] = Obstacle(x, y, color)
 
-    def add_ball(self, x: int,  y: int, direction: str) -> None:
+    def add_ball(self, x: int,  y: int, direction: str, animal: str = None) -> None:
         """
         Ajoute une bille à la grille.
 
@@ -58,7 +59,7 @@ class Grid:
             y (int): La position en y de la bille.
             direction (str): la direction de la bille.
         """
-        self.balls.append(Ball(x, y, direction))
+        self.balls.append(Ball(x, y, direction, animal))
 
     def remove_ball(self, ball):
         """

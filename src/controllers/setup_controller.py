@@ -40,14 +40,16 @@ class SetupController:
         if self.game_mode == "trap":
             game_mode.trap_game_setup(self)
         elif self.game_mode == "base":
-            game_mode.trap_game_setup(self)
+            game_mode.base_game_setup(self)
+        elif self.game_mode == "poule renard vipere":
+            game_mode.poule_renard_vipere_game_setup(self)
 
-    def setup_model(self, random_obstacle: bool, random_balls: bool):
+    def setup_model(self, random_obstacle: bool, random_balls: bool, animal: bool):
         self.model = Grid(self.num_rows, self.num_columns)
         coords_obstacle, coords_balls = self._setup_items_coords(
             random_obstacle, random_balls)
         self._setup_obstacles(self.num_obstacles, coords_obstacle)
-        self._setup_balls(self.num_balls, coords_balls)
+        self._setup_balls(self.num_balls, coords_balls, animal)
 
     def _setup_items_coords(self, random_obstacle, random_balls):
         obstacles_coordinates, balls_coordinates = [], []
@@ -99,7 +101,7 @@ class SetupController:
             color = weighted_colors[i]
             self.model.add_obstacle(coords[i][0], coords[i][1], color)
 
-    def _setup_balls(self, n, coords):
+    def _setup_balls(self, n, coords, animal):
         """
         Place un nombre défini de billes dans la grille.
 
@@ -110,7 +112,9 @@ class SetupController:
         for i in range(n):
             direction = self.model.ball_directions[i % len(
                 self.model.ball_directions)]
-            self.model.add_ball(coords[i][0], coords[i][1], direction)
+            self.model.add_ball(
+                coords[i][0], coords[i][1], direction,
+                self.model.ball_animals[i % len(self.model.ball_animals)] if animal else ...)
 
     def select_coordinates_equally(self, n_items: int) -> list:
         """
@@ -205,4 +209,8 @@ class SetupController:
         Dessine toutes les billes sur la grille.
         """
         for ball in self.model.balls:
-            ball.object_view = self.view.draw_ball(ball)
+            if not ball.animal:
+                ball.object_view = self.view.draw_ball(ball)
+            elif ball.animal:
+                ball.object_view = self.view.draw_ball(
+                    ball, f"assets/{ball.animal}.png")

@@ -10,8 +10,9 @@ class Ball:
         object_view (Any): L'objet graphique représentant la bille.
     """
     available_directions = ["left", "up", "right", "down"]
+    available_animals = ["poule", "renard", "vipere"]
 
-    def __init__(self, x: int, y: int, direction: str):
+    def __init__(self, x: int, y: int, direction: str, animal: str):
         """
         Initialise une bille avec une position initiale et une direction.
 
@@ -23,6 +24,7 @@ class Ball:
         self.x = x
         self.y = y
         self.direction = direction
+        self.animal = animal
         self.object_view = None
 
     def move(self, test: bool = False) -> None:
