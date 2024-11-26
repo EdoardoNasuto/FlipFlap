@@ -46,6 +46,8 @@ def trap_game(game: GameController) -> None:
 
 
 def poule_renard_vipere_game_setup(game: SetupController):
+    Obstacle.available_colors = {"red": 0.30,
+                                 "blue": 0.30, "green": 0.30, "purple": 0.10}
     game.setup_model(random_obstacle=True, random_balls=True, animal=True)
     game.setup_view()
 

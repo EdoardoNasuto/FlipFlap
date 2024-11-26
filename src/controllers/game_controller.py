@@ -76,7 +76,15 @@ class GameController:
             if effect == "delete":
                 self.remove_ball(ball)
             elif effect == "new_ball":
-                ...
+                print((self.model.ball_directions.index(
+                    ball.direction) + 2) % 4)
+                new_ball = self.model.add_ball(
+                    ball.x, ball.y,
+                    (self.model.ball_directions[((self.model.ball_directions.index(
+                        ball.direction) + 2) % 4)]),
+                    ball.animal)
+                new_ball.object_view = self.view.draw_ball(
+                    new_ball, f"assets/{ball.animal}.png")
 
     def change_obstacle_color_on_click(self, mode: str) -> None:
         """

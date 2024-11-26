@@ -59,7 +59,9 @@ class Grid:
             y (int): La position en y de la bille.
             direction (str): la direction de la bille.
         """
-        self.balls.append(Ball(x, y, direction, animal))
+        ball = Ball(x, y, direction, animal)
+        self.balls.append(ball)
+        return ball
 
     def remove_ball(self, ball):
         """
