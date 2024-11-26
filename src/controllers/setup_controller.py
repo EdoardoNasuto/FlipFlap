@@ -1,4 +1,4 @@
-from random import choice, choices, shuffle
+from random import choice, sample, shuffle
 
 from src.models.grid_model import Grid
 from src.views.game_view import GameView
@@ -57,7 +57,7 @@ class SetupController:
                                  for y in range(self.num_rows)]
 
         if random_obstacle:
-            obstacles_coordinates = choices(
+            obstacles_coordinates = sample(
                 self.available_coords, k=self.num_obstacles)
             self.available_coords = [
                 coord for coord in self.available_coords if coord not in obstacles_coordinates]
@@ -67,7 +67,7 @@ class SetupController:
                 self.num_obstacles))
 
         if random_balls:
-            balls_coordinates = choices(
+            balls_coordinates = sample(
                 self.available_coords, k=self.num_balls)
             self.available_coords = [
                 coord for coord in self.available_coords if coord not in balls_coordinates]
