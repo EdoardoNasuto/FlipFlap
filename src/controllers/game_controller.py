@@ -163,12 +163,14 @@ class GameController:
                 if other_ball is not ball:
                     if ball.x == other_ball.x:
                         if ball.y == other_ball.y:
-                            if self.model.ball_animals.index(ball.animal) - 1 == self.model.ball_animals.index(other_ball.animal):
+                            if (self.model.ball_animals.index(ball.animal) - 1) % len(self.model.ball_animals) == self.model.ball_animals.index(other_ball.animal):
                                 print(f"{other_ball.animal} --> {ball.animal}")
                                 self.remove_ball(ball)
                     elif ball.x-1 % (self.model.num_columns-1) == other_ball.x or ball.x+1 % (self.model.num_columns-1) == other_ball.x:
                         if ball.y-1 % (self.model.num_rows-1) == other_ball.y or ball.y+1 % (self.model.num_rows-1) == other_ball.y:
                             print("ya")
                             if self.model.ball_directions[(self.model.ball_directions.index(ball.direction) + 2) % 4] == other_ball.direction:
-                                print(f"{other_ball.animal} --> {ball.animal}")
-                                self.remove_ball(ball)
+                                if (self.model.ball_animals.index(ball.animal) - 1) % len(self.model.ball_animals) == self.model.ball_animals.index(other_ball.animal):
+                                    print(
+                                        f"{other_ball.animal} --> {ball.animal}")
+                                    self.remove_ball(ball)
