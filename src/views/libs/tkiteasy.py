@@ -87,7 +87,7 @@ class Canevas(tk.Canvas):
 # dessinerFleche: ne renvoit pas d'objet graphique
 # N = longueur des branches de la flèche
     def dessinerFleche(self, x, y, x2, y2, N, col, ep=1):
-        self.dessinerLigne(x, y, x2, y2, col, ep)
+        main_line = self.dessinerLigne(x, y, x2, y2, col, ep)
         vx, vy = x2-x, y2-y                   # vecteur initial
         m = max(abs(vx), abs(vy))
         vx /= m
@@ -96,8 +96,7 @@ class Canevas(tk.Canvas):
         pvx, pvy = vy, -vx                    # 90°
         fx1, fy1 = px+pvx*N, py+pvy*N         # 1ère extrémité
         fx2, fy2 = px-pvx*N, py-pvy*N         # 2nde extrémité
-        self.dessinerLigne(x2, y2, fx1, fy1, col, ep)
-        self.dessinerLigne(x2, y2, fx2, fy2, col, ep)
+        return main_line, self.dessinerLigne(x2, y2, fx1, fy1, col, ep), self.dessinerLigne(x2, y2, fx2, fy2, col, ep)
 
 ################################################################################
 # MODIFICATEURS
