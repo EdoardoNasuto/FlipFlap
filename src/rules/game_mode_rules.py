@@ -7,7 +7,7 @@ from src.models.ball_model import Ball
 
 
 def base_game_setup(game: SetupController):
-    game.setup_model(random_obstacle=True, random_balls=True)
+    game.setup_model(random_obstacle=True, random_balls=True, animal=False)
     game.setup_view()
 
 
@@ -26,7 +26,7 @@ def base_game(game: GameController) -> None:
 def trap_game_setup(game: SetupController):
     Obstacle.available_colors = {"red": 0.40,
                                  "blue": 0.30, "green": 0.20, "white": 0.10}
-    game.setup_model(random_obstacle=False, random_balls=False)
+    game.setup_model(random_obstacle=False, random_balls=False, animal=False)
     game.setup_view()
 
 

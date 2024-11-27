@@ -114,7 +114,7 @@ class SetupController:
                 self.model.ball_directions)]
             self.model.add_ball(
                 coords[i][0], coords[i][1], direction,
-                self.model.ball_animals[i % len(self.model.ball_animals)] if animal else ...)
+                self.model.ball_animals[i % len(self.model.ball_animals)] if animal else None)
 
     def select_coordinates_equally(self, n_items: int) -> list:
         """
@@ -211,6 +211,8 @@ class SetupController:
         for ball in self.model.balls:
             if not ball.animal:
                 ball.object_view = self.view.draw_ball(ball)
+                self.view.update_ball_direction(ball)
             elif ball.animal:
                 ball.object_view = self.view.draw_ball(
                     ball, f"assets/{ball.animal}.png")
+                self.view.update_ball_direction(ball)
