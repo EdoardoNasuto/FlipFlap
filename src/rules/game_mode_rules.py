@@ -61,5 +61,6 @@ def poule_renard_vipere_game(game: GameController) -> None:
         sleep(game.speed)
         for ball in list(game.model.balls):
             if not game.move_ball(ball):
-                game.remove_ball(ball)
+                game.ball_traverse_board(ball)
+        game.simulate_food_chain()
         game.view.refresh()
