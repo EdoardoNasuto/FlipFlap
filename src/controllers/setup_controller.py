@@ -110,8 +110,7 @@ class SetupController:
             coords (list): Liste des coordonnées pour les billes.
         """
         for i in range(n):
-            direction = self.model.ball_directions[i % len(
-                self.model.ball_directions)]
+            direction = choice(self.model.ball_directions)
             self.model.add_ball(
                 coords[i][0], coords[i][1], direction,
                 self.model.ball_animals[i % len(self.model.ball_animals)] if animal else None)
