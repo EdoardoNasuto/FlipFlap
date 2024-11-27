@@ -105,14 +105,45 @@ class GameView:
         self.window.deplacer(ball, x2*self.size-x1 *
                              self.size, y2*self.size-y1*self.size)
 
-    def remove_ball(self, ball: object) -> None:
+    def update_ball_direction(self, ball: object):
+        if ball.direction_view:
+            for line in ball.direction_view:
+                self.window.supprimer(line)
+
+        direction = {
+            "left": (-1, 0),
+            "right": (1, 0),
+            "up": (0, -1),
+            "down": (0, 1)
+        }
+
+        dir_x, dir_y = direction[ball.direction]
+
+        # Calcul des coordonnées centrées dans la case
+        center_x = ball.x * self.size + self.size / 2
+        center_y = ball.y * self.size + self.size / 2
+        offset = self.size / 4  # Décalage pour que la flèche reste dans la case
+
+        start_x = center_x - dir_x * offset
+        start_y = center_y - dir_y * offset
+        end_x = center_x + dir_x * offset
+        end_y = center_y + dir_y * offset
+
+        # Dessiner la flèche
+        ball.direction_view = self.window.dessinerFleche(
+            start_x, start_y, end_x, end_y, self.size / 8, "red", 4)
+        print(ball.direction_view)
+
+    def remove_ball(self, ball_object: object, ball_direction: object) -> None:
         """
         Supprime une bille de la grille.
 
         Args:
             ball (object): L'objet représentant la bille à supprimer (attributs : `x`, `y`, `object_view`).
         """
-        self.window.supprimer(ball)
+        self.window.supprimer(ball_object)
+        for line in ball_direction:
+            self.window.supprimer(line)
 
     def refresh(self) -> None:
         """

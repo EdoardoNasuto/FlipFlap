@@ -26,6 +26,7 @@ class Ball:
         self.direction = direction
         self.animal = animal
         self.object_view = None
+        self.direction_view = None
 
     def move(self, test: bool = False) -> None:
         """Déplace la bille en fonction de sa direction."""

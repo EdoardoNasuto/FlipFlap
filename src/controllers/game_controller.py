@@ -85,6 +85,7 @@ class GameController:
                     ball.animal)
                 new_ball.object_view = self.view.draw_ball(
                     new_ball, f"assets/{ball.animal}.png")
+        self.view.update_ball_direction(ball)
 
     def change_obstacle_color_on_click(self, mode: str) -> None:
         """
@@ -143,7 +144,7 @@ class GameController:
         """
         Supprimer une bille du model et de la view
         """
-        self.view.remove_ball(ball.object_view)
+        self.view.remove_ball(ball.object_view, ball.direction_view)
         self.model.remove_ball(ball)
 
     def ball_traverse_board(self, ball: Ball):
