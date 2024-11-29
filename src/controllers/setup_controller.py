@@ -56,25 +56,25 @@ class SetupController:
         self.available_coords = [(x, y) for x in range(self.num_columns)
                                  for y in range(self.num_rows)]
 
+        if random_obstacle == ItemSetup.EQUALLY:
+            obstacles_coordinates.extend(self._select_coordinates_equally(
+                self.num_obstacles))
+
+        if random_balls == ItemSetup.EQUALLY:
+            balls_coordinates.extend(self._select_coordinates_equally(
+                self.num_balls))
+
         if random_obstacle == ItemSetup.RANDOM:
             obstacles_coordinates = sample(
                 self.available_coords, k=self.num_obstacles)
             self.available_coords = [
                 coord for coord in self.available_coords if coord not in obstacles_coordinates]
 
-        elif random_obstacle == ItemSetup.EQUALLY:
-            obstacles_coordinates.extend(self._select_coordinates_equally(
-                self.num_obstacles))
-
         if random_balls == ItemSetup.RANDOM:
             balls_coordinates = sample(
                 self.available_coords, k=self.num_balls)
             self.available_coords = [
                 coord for coord in self.available_coords if coord not in balls_coordinates]
-
-        elif not random_obstacle == ItemSetup.EQUALLY:
-            balls_coordinates.extend(self._select_coordinates_equally(
-                self.num_balls))
 
         shuffle(obstacles_coordinates), shuffle(balls_coordinates)
         return obstacles_coordinates, balls_coordinates

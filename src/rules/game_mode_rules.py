@@ -32,5 +32,6 @@ def poule_renard_vipere_game(num_rows, num_columns, num_obstacles, num_balls, si
                      obstacle_in_game_color_change={
                          "red": 0.34, "blue": 0.33, "green": 0.33},
                      ball_out_of_the_board=BallOutOfTheBoard.TRAVERSE_BOARD,
+                     change_obstacle_color_if_ball_present=ChangeObstacleColor.RANDOM,
                      ball_collision=BallCollision.SIMULATE_FOOD_CHAIN)
     game.run_game()
