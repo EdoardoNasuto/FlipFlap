@@ -63,7 +63,7 @@ class SetupController:
                 coord for coord in self.available_coords if coord not in obstacles_coordinates]
 
         elif random_obstacle == ItemSetup.EQUALLY:
-            obstacles_coordinates.extend(self.select_coordinates_equally(
+            obstacles_coordinates.extend(self._select_coordinates_equally(
                 self.num_obstacles))
 
         if random_balls == ItemSetup.RANDOM:
@@ -73,7 +73,7 @@ class SetupController:
                 coord for coord in self.available_coords if coord not in balls_coordinates]
 
         elif not random_obstacle == ItemSetup.EQUALLY:
-            balls_coordinates.extend(self.select_coordinates_equally(
+            balls_coordinates.extend(self._select_coordinates_equally(
                 self.num_balls))
 
         shuffle(obstacles_coordinates), shuffle(balls_coordinates)
