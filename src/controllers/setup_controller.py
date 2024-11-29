@@ -34,12 +34,22 @@ class SetupController:
         self.num_balls = num_balls
         self.size = size
 
+    # ------------------- Public Methods -------------------
+
     def setup_model(self, random_obstacle: ItemSetup, random_balls: ItemSetup, ball_item: ItemnType):
         self.model = Grid(self.num_rows, self.num_columns)
         coords_obstacle, coords_balls = self._setup_items_coords(
             random_obstacle, random_balls)
         self._setup_obstacles(self.num_obstacles, coords_obstacle)
         self._setup_balls(self.num_balls, coords_balls, ball_item)
+
+    def setup_view(self):
+        self.view = GameView(self.num_rows, self.num_columns, self.size)
+        self.setup_obstacles()
+        self.setup_grid()
+        self.setup_balls()
+
+    # ------------------- Private Methods -------------------
 
     def _setup_items_coords(self, random_obstacle, random_balls):
         obstacles_coordinates, balls_coordinates = [], []
@@ -105,7 +115,7 @@ class SetupController:
                 coords[i][0], coords[i][1], direction,
                 self.model.ball_animals[i % len(self.model.ball_animals)] if item == ItemnType.ANIMALS else None)
 
-    def select_coordinates_equally(self, n_items: int) -> list:
+    def _select_coordinates_equally(self, n_items: int) -> list:
         """
         Sélectionne aléatoirement des coordonnées (x, y) dans une grille de manière à répartir
         les items aussi équitablement que possible entre les colonnes.
@@ -169,12 +179,6 @@ class SetupController:
         return selected_coordinates
 
     # -----------------------------------------------------
-
-    def setup_view(self):
-        self.view = GameView(self.num_rows, self.num_columns, self.size)
-        self.setup_obstacles()
-        self.setup_grid()
-        self.setup_balls()
 
     def setup_obstacles(self):
         """

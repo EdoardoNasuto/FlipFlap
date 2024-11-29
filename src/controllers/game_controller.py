@@ -28,6 +28,8 @@ class GameController:
         self.model = grid
         self.view = gui
 
+    # ------------------- Public Methods -------------------
+
     def move_ball(self, ball: Ball) -> bool:
         """
         Met à jour la position d'une bille et interagit avec les obstacles.
@@ -85,38 +87,6 @@ class GameController:
             # Si la bille est en contact avec un obstacle, change la couleur
             self._change_obstacle_color(obstacle, mode)
 
-    def _change_obstacle_color(self, obstacle: Obstacle, mode) -> None:
-        """
-        Change la couleur d'un obstacle.
-        """
-
-        colors = list(self.model.obstacle_colors.keys())
-
-        if obstacle.color in colors:
-            if mode == ChangeObstacleColor.RANDOM:
-                colors.remove(obstacle.color)
-                obstacle.color = choice(colors)
-
-            elif mode == ChangeObstacleColor.WEIGHTED:
-                weights = list(self.model.obstacle_colors.values())
-                weights.pop(colors.index(obstacle.color))
-                colors.remove(obstacle.color)
-                obstacle.color = choices(colors, weights=weights, k=1)[0]
-
-            elif mode == ChangeObstacleColor.SEQUENTIAL:
-                new_color = (colors.index(obstacle.color)+1) % len(colors)
-                obstacle.color = colors[new_color]
-
-            self.view.update_obstacle_color(
-                obstacle.object_view, obstacle.color)
-
-    def remove_ball(self, ball: Ball):
-        """
-        Supprimer une bille du model et de la view
-        """
-        self.view.remove_ball(ball.object_view, ball.direction_view)
-        self.model.remove_ball(ball)
-
     def ball_traverse_board(self, ball: Ball):
         """
         Fait traverser la grille à la bille
@@ -126,6 +96,13 @@ class GameController:
         self.view.update_ball_position(
             ball.object_view, x1, y1, ball.x, ball.y)
         self.update_ball_direction(ball)
+
+    def remove_ball(self, ball: Ball):
+        """
+        Supprimer une bille du model et de la view
+        """
+        self.view.remove_ball(ball.object_view, ball.direction_view)
+        self.model.remove_ball(ball)
 
     def simulate_food_chain(self):
         dir = {
@@ -152,3 +129,30 @@ class GameController:
                                 # Verifie si l'animal doit etre mangé ou pas
                                 if ((self.model.ball_animals.index(ball.animal) - 1) % len(self.model.ball_animals)) == self.model.ball_animals.index(other_ball.animal):
                                     self.remove_ball(ball)
+
+    # ------------------- Private Methods -------------------
+
+    def _change_obstacle_color(self, obstacle: Obstacle, mode) -> None:
+        """
+        Change la couleur d'un obstacle.
+        """
+
+        colors = list(self.model.obstacle_colors.keys())
+
+        if obstacle.color in colors:
+            if mode == ChangeObstacleColor.RANDOM:
+                colors.remove(obstacle.color)
+                obstacle.color = choice(colors)
+
+            elif mode == ChangeObstacleColor.WEIGHTED:
+                weights = list(self.model.obstacle_colors.values())
+                weights.pop(colors.index(obstacle.color))
+                colors.remove(obstacle.color)
+                obstacle.color = choices(colors, weights=weights, k=1)[0]
+
+            elif mode == ChangeObstacleColor.SEQUENTIAL:
+                new_color = (colors.index(obstacle.color)+1) % len(colors)
+                obstacle.color = colors[new_color]
+
+            self.view.update_obstacle_color(
+                obstacle.object_view, obstacle.color)
