@@ -134,10 +134,7 @@ class GameController:
 
             elif mode == "sequential":
                 new_color = (colors.index(obstacle.color)+1) % len(colors)
-                print(colors)
-                print(obstacle.color)
                 obstacle.color = colors[new_color]
-                print(obstacle.color)
 
             self.view.update_obstacle_color(
                 obstacle.object_view, obstacle.color)

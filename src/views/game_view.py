@@ -132,7 +132,6 @@ class GameView:
         # Dessiner la flèche
         ball.direction_view = self.window.dessinerFleche(
             start_x, start_y, end_x, end_y, self.size / 8, "red", 4)
-        print(ball.direction_view)
 
     def remove_ball(self, ball_object: object, ball_direction: object) -> None:
         """
