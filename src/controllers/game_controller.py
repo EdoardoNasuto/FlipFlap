@@ -105,30 +105,12 @@ class GameController:
         self.model.remove_ball(ball)
 
     def simulate_food_chain(self):
-        dir = {
-            "left": (-1, 0),
-            "right": (1, 0),
-            "up": (0, -1),
-            "down": (0, 1)
-        }
-
         for ball in list(self.model.balls):
             for other_ball in list(self.model.balls):
-                if other_ball is not ball:
-
-                    if ball.x == other_ball.x:
-                        if ball.y == other_ball.y:
-                            if ((self.model.ball_animals.index(ball.animal) - 1) % len(self.model.ball_animals)) == self.model.ball_animals.index(other_ball.animal):
-                                self.remove_ball(ball)
-
-                    # Regarde unquement la case voisine qui est dans sa direction
-                    elif (ball.x + dir[ball.direction][0] + self.model.num_columns) % self.model.num_columns == other_ball.x:
-                        if (ball.y + dir[ball.direction][1] + self.model.num_rows) % self.model.num_rows == other_ball.y:
-                            # Vérifie que l'animal voisin et la direction oposé de la sienne (va le traverser)
-                            if self.model.ball_directions[(self.model.ball_directions.index(ball.direction) + 2) % 4] == other_ball.direction:
-                                # Verifie si l'animal doit etre mangé ou pas
-                                if ((self.model.ball_animals.index(ball.animal) - 1) % len(self.model.ball_animals)) == self.model.ball_animals.index(other_ball.animal):
-                                    self.remove_ball(ball)
+                if self._detect_collision(ball, other_ball):
+                    # Verifie si l'animal doit etre mangé ou pas
+                    if ((self.model.ball_animals.index(ball.animal) - 1) % len(self.model.ball_animals)) == self.model.ball_animals.index(other_ball.animal):
+                        self.remove_ball(ball)
 
     # ------------------- Private Methods -------------------
 
@@ -156,3 +138,23 @@ class GameController:
 
             self.view.update_obstacle_color(
                 obstacle.object_view, obstacle.color)
+
+    def _detect_collision(self, ball, other_ball):
+        dir = {
+            "left": (-1, 0),
+            "right": (1, 0),
+            "up": (0, -1),
+            "down": (0, 1)
+        }
+
+        if other_ball is not ball:
+
+            if ball.x == other_ball.x and ball.y == other_ball.y:
+                return True
+
+            # Regarde unquement la case voisine qui est dans sa direction
+            elif (ball.x + dir[ball.direction][0] + self.model.num_columns) % self.model.num_columns == other_ball.x:
+                if (ball.y + dir[ball.direction][1] + self.model.num_rows) % self.model.num_rows == other_ball.y:
+                    # Vérifie que l'animal voisin et la direction oposé de la sienne (va le traverser)
+                    if self.model.ball_directions[(self.model.ball_directions.index(ball.direction) + 2) % 4] == other_ball.direction:
+                        return True
