@@ -2,6 +2,7 @@ from random import choice, sample, shuffle
 
 from src.models.grid_model import Grid
 from src.views.game_view import GameView
+from src.rules.params_rule import *
 
 
 class SetupController:
@@ -16,7 +17,7 @@ class SetupController:
         game_mode (str): Mode de jeu sélectionné, tel que 'base' ou 'trap'.
     """
 
-    def __init__(self, num_rows: int, num_columns: int, num_obstacles: int, num_balls: int, size: int, game_mode: str):
+    def __init__(self, num_rows: int, num_columns: int, num_obstacles: int, num_balls: int, size: int):
         """
         Initialise les paramètres du menu.
 
@@ -32,47 +33,36 @@ class SetupController:
         self.num_obstacles = num_obstacles
         self.num_balls = num_balls
         self.size = size
-        self.game_mode = game_mode
-        self.setup()
 
-    def setup(self):
-        import src.rules.game_mode_rules as game_mode
-        if self.game_mode == "trap":
-            game_mode.trap_game_setup(self)
-        elif self.game_mode == "base":
-            game_mode.base_game_setup(self)
-        elif self.game_mode == "poule renard vipere":
-            game_mode.poule_renard_vipere_game_setup(self)
-
-    def setup_model(self, random_obstacle: bool, random_balls: bool, animal: bool):
+    def setup_model(self, random_obstacle: ItemSetup, random_balls: ItemSetup, ball_item: ItemnType):
         self.model = Grid(self.num_rows, self.num_columns)
         coords_obstacle, coords_balls = self._setup_items_coords(
             random_obstacle, random_balls)
         self._setup_obstacles(self.num_obstacles, coords_obstacle)
-        self._setup_balls(self.num_balls, coords_balls, animal)
+        self._setup_balls(self.num_balls, coords_balls, ball_item)
 
     def _setup_items_coords(self, random_obstacle, random_balls):
         obstacles_coordinates, balls_coordinates = [], []
         self.available_coords = [(x, y) for x in range(self.num_columns)
                                  for y in range(self.num_rows)]
 
-        if random_obstacle:
+        if random_obstacle == ItemSetup.RANDOM:
             obstacles_coordinates = sample(
                 self.available_coords, k=self.num_obstacles)
             self.available_coords = [
                 coord for coord in self.available_coords if coord not in obstacles_coordinates]
 
-        elif not random_obstacle:
+        elif random_obstacle == ItemSetup.EQUALLY:
             obstacles_coordinates.extend(self.select_coordinates_equally(
                 self.num_obstacles))
 
-        if random_balls:
+        if random_balls == ItemSetup.RANDOM:
             balls_coordinates = sample(
                 self.available_coords, k=self.num_balls)
             self.available_coords = [
                 coord for coord in self.available_coords if coord not in balls_coordinates]
 
-        elif not random_obstacle:
+        elif not random_obstacle == ItemSetup.EQUALLY:
             balls_coordinates.extend(self.select_coordinates_equally(
                 self.num_balls))
 
@@ -101,7 +91,7 @@ class SetupController:
             color = weighted_colors[i]
             self.model.add_obstacle(coords[i][0], coords[i][1], color)
 
-    def _setup_balls(self, n, coords, animal):
+    def _setup_balls(self, n, coords, item):
         """
         Place un nombre défini de billes dans la grille.
 
@@ -113,7 +103,7 @@ class SetupController:
             direction = choice(self.model.ball_directions)
             self.model.add_ball(
                 coords[i][0], coords[i][1], direction,
-                self.model.ball_animals[i % len(self.model.ball_animals)] if animal else None)
+                self.model.ball_animals[i % len(self.model.ball_animals)] if item == ItemnType.ANIMALS else None)
 
     def select_coordinates_equally(self, n_items: int) -> list:
         """

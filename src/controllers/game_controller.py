@@ -4,6 +4,7 @@ from src.views.game_view import GameView
 from src.models.grid_model import Grid
 from src.models.ball_model import Ball
 from src.models.obstacle_model import Obstacle
+from src.rules.params_rule import *
 
 
 class GameController:
@@ -16,41 +17,16 @@ class GameController:
         speed (float): La vitesse de la simulation, par défaut 0.1.
     """
 
-    def __init__(self, grid: Grid, gui: GameView, speed: float = 0.1, game_mode: str = "base"):
+    def __init__(self, grid: Grid, gui: GameView):
         """
         Initialise le contrôleur avec une grille, une vue, et configure les obstacles et billes.
 
         Args:
             grid (Grid): L'instance de la grille utilisée pour la simulation.
             gui (GameView): L'interface graphique pour la simulation.
-            speed (float, optionnel): La vitesse de la simulation, par défaut 0.1.
         """
         self.model = grid
         self.view = gui
-        self.speed = speed
-        self.game_mode = game_mode
-        self.view.refresh()
-        self.start_game()
-
-    def start_game(self) -> None:
-        """
-        Démarre le jeu en fonction du mode choisi.
-        """
-        self.run_simulation()
-
-    def run_simulation(self) -> None:
-        """
-        Exécute les rounds du jeu, adapté au mode.
-        """
-        self.view.refresh()
-        import src.rules.game_mode_rules as mode
-        if self.game_mode == "base":
-            mode.base_game(self)
-        elif self.game_mode == "trap":
-            mode.trap_game(self)
-        elif self.game_mode == "poule renard vipere":
-            mode.poule_renard_vipere_game(self)
-        self.view.exit_game()
 
     def move_ball(self, ball: Ball) -> bool:
         """
@@ -109,30 +85,25 @@ class GameController:
             # Si la bille est en contact avec un obstacle, change la couleur
             self._change_obstacle_color(obstacle, mode)
 
-    def _change_obstacle_color(self, obstacle: Obstacle, mode: str = "sequential") -> None:
+    def _change_obstacle_color(self, obstacle: Obstacle, mode) -> None:
         """
         Change la couleur d'un obstacle.
         """
 
-        valid_modes = {"random", "weighted", "sequential"}
-        if mode not in valid_modes:
-            raise ValueError(
-                f"The mode must be one of the following values: {', '.join(valid_modes)}.")
-
         colors = list(self.model.obstacle_colors.keys())
 
         if obstacle.color in colors:
-            if mode == "random":
+            if mode == ChangeObstacleColor.RANDOM:
                 colors.remove(obstacle.color)
                 obstacle.color = choice(colors)
 
-            elif mode == "weighted":
+            elif mode == ChangeObstacleColor.WEIGHTED:
                 weights = list(self.model.obstacle_colors.values())
                 weights.pop(colors.index(obstacle.color))
                 colors.remove(obstacle.color)
                 obstacle.color = choices(colors, weights=weights, k=1)[0]
 
-            elif mode == "sequential":
+            elif mode == ChangeObstacleColor.SEQUENTIAL:
                 new_color = (colors.index(obstacle.color)+1) % len(colors)
                 obstacle.color = colors[new_color]
 
