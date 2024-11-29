@@ -60,10 +60,10 @@ class GameController:
                     ball.animal)
                 new_ball.object_view = self.view.draw_ball(
                     new_ball, f"assets/{ball.animal}.png")
-                self.view.update_ball_direction(new_ball)
+                self.view.update_ball_direction_arrow(new_ball)
                 ball = False
         if ball:
-            self.view.update_ball_direction(ball)
+            self.view.update_ball_direction_arrow(ball)
 
     def change_obstacle_color_on_click(self, mode: str) -> None:
         """

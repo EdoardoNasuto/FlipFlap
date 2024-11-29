@@ -41,7 +41,7 @@ class GameRules ():
 
     def run_game(self):
         self.game = GameController(
-            self.setup_controller.model, self.setup_controller.view, 0)
+            self.setup_controller.model, self.setup_controller.view)
 
         self.game.view.refresh()
 

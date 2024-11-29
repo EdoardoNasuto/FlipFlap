@@ -105,7 +105,7 @@ class GameView:
         self.window.deplacer(ball, x2*self.size-x1 *
                              self.size, y2*self.size-y1*self.size)
 
-    def update_ball_direction(self, ball: object):
+    def update_ball_direction_arrow(self, ball: object):
         if ball.direction_view:
             for line in ball.direction_view:
                 self.window.supprimer(line)

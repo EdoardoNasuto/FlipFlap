@@ -200,8 +200,8 @@ class SetupController:
         for ball in self.model.balls:
             if not ball.animal:
                 ball.object_view = self.view.draw_ball(ball)
-                self.view.update_ball_direction(ball)
+                self.view.update_ball_direction_arrow(ball)
             elif ball.animal:
                 ball.object_view = self.view.draw_ball(
                     ball, f"assets/{ball.animal}.png")
-                self.view.update_ball_direction(ball)
+                self.view.update_ball_direction_arrow(ball)
