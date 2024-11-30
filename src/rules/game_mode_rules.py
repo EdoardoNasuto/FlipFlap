@@ -37,4 +37,5 @@ def poule_renard_vipere_game(num_rows, num_columns, num_obstacles, num_balls, si
               ball_collision=BallCollision.SIMULATE_FOOD_CHAIN,
 
               players=3,
-              players_choices=[[PlayerChoices.CHANGE_OBSTACLE_COLOR, ChangeObstacleColor.RANDOM]],)
+              players_choices=[[PlayerChoices.CHANGE_OBSTACLE_COLOR, ChangeObstacleColor.RANDOM],
+                               [PlayerChoices.ADD_OBSTACLE, ChangeObstacleColor.RANDOM]],)

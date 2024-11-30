@@ -69,6 +69,7 @@ class GameController:
 
     def players_turn(self, n: int, player_choises: list):
         for i in range(n):
+            print(player_choises)
             for choice in player_choises:
                 print(choice[0].value)
 
@@ -77,6 +78,19 @@ class GameController:
             if player_choises[res-1][0] == PlayerChoices.CHANGE_OBSTACLE_COLOR:
                 self.change_obstacle_color_on_click(
                     player_choises[res-1][1], True)
+            if player_choises[res-1][0] == PlayerChoices.ADD_OBSTACLE:
+                self.add_obstacle(player_choises[res-1][1], "black")
+
+    def add_obstacle(self, mode, color):
+        clic = self.view.attend_clic()
+
+        obstacle: Obstacle = self.model.add_obstacle(clic.x//self.view.size,
+                                                     clic.y//self.view.size, color)
+        obstacle.object_view = self.view.draw_obstacle(
+            obstacle.x, obstacle.y, color)
+        self.view.window.placerAuDessous(obstacle.object_view)
+        self._change_obstacle_color(obstacle, mode, True)
+        self.view.refresh()
 
     def change_obstacle_color_on_click(self, mode: str, blocking: bool = False) -> None:
         """
@@ -132,14 +146,17 @@ class GameController:
 
     # ------------------- Private Methods -------------------
 
-    def _change_obstacle_color(self, obstacle: Obstacle, mode) -> None:
+    def _change_obstacle_color(self, obstacle: Obstacle, mode, add_mode=None) -> None:
         """
         Change la couleur d'un obstacle.
         """
 
         colors = list(self.model.obstacle_colors.keys())
 
-        if obstacle.color in colors:
+        if add_mode:
+            colors.append(obstacle.color)
+
+        if obstacle.color in colors or add_mode:
             if mode == ChangeObstacleColor.RANDOM:
                 colors.remove(obstacle.color)
                 obstacle.color = choice(colors)

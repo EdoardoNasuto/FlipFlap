@@ -49,6 +49,7 @@ class Grid:
             color (str): La couleur de l'obstacle.
         """
         self.grid[y][x] = Obstacle(x, y, color)
+        return self.grid[y][x]
 
     def add_ball(self, x: int,  y: int, direction: str, animal: str = None) -> None:
         """
