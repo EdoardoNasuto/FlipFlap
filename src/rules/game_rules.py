@@ -20,8 +20,8 @@ class GameRules ():
                  change_obstacle_color_if_ball_present: Optional[ChangeObstacleColor] = None,
                  ball_collision: Optional[BallCollision] = None,
 
-                 player_choices:  list[Optional[PlayerChoices]] = None,
-                 player_change_obstacle_color: Optional[ChangeObstacleColor] = None
+                 players: int = None,
+                 players_choices: list[Optional[PlayerChoices]] = None,
                  ):
 
         def setup_game():
@@ -39,8 +39,8 @@ class GameRules ():
 
             while game.model.balls:
                 sleep(1)
-                if player_choices:
-                    game.players_turn()
+                if players:
+                    game.players_turn(players, players_choices)
 
                 for ball in list(game.model.balls):
 

@@ -75,6 +75,15 @@ class GameView:
         """
         return self.window.recupererClic()
 
+    def attend_clic(self):
+        """
+        Récupère le clic de l'utilisateur.
+
+        Returns:
+            tuple: La position du clic de l'utilisateur sous forme de coordonnées (x, y).
+        """
+        return self.window.attendreClic()
+
     def draw_ball(self, ball: object, file: str = None) -> object:
         """
         Dessine une bille sur la grille à sa position actuelle.

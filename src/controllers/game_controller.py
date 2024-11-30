@@ -67,11 +67,26 @@ class GameController:
         if ball:
             self.view.update_ball_direction_arrow(ball)
 
-    def change_obstacle_color_on_click(self, mode: str) -> None:
+    def players_turn(self, n: int, player_choises: list):
+        for i in range(n):
+            for choice in player_choises:
+                print(choice[0].value)
+
+            res = int(input("Choisi une action : "))
+
+            if player_choises[res-1][0] == PlayerChoices.CHANGE_OBSTACLE_COLOR:
+                self.change_obstacle_color_on_click(
+                    player_choises[res-1][1], True)
+
+    def change_obstacle_color_on_click(self, mode: str, blocking: bool = False) -> None:
         """
         Gère les entrées de l'utilisateur, comme les clics sur la grille.
         """
-        clic = self.view.recup_clic()
+        if not blocking:
+            clic = self.view.recup_clic()
+        elif blocking:
+            clic = self.view.attend_clic()
+
         if clic:
             obstacle = self.model.grid[clic.y //
                                        self.view.size][clic.x // self.view.size]
@@ -111,6 +126,9 @@ class GameController:
                     # Verifie si l'animal doit etre mangé ou pas
                     if ((self.model.ball_animals.index(ball.animal) - 1) % len(self.model.ball_animals)) == self.model.ball_animals.index(other_ball.animal):
                         self.remove_ball(ball)
+
+    def rebound_ball_at_collision(self):
+        ...
 
     # ------------------- Private Methods -------------------
 

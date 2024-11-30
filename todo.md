@@ -10,14 +10,13 @@
 ### Phase 1
 - [X] Ajout d'une case de dédoublement de bille
 - [X] Ajout du système proie prédateur
-- [ ] Ajout d'une indication de direction de l'animal
-- [ ] Un joueur selectionne une équipe
+- [X] Ajout d'une indication de direction de l'animal
 ###  Phase 2 (tour par tour)
 - [ ] Chaque joueur à son tour de jeu choisi de faire une action parmi les suivantes :
     - [ ] Supprimer une bille adverse (max 20% des billes)
     - [ ] Ajouter une bille de sa propre équipe (max 20% des billes)
     - [ ] Ajouter un obstacle de la couleur de son choix
-    - [ ] Modifier la couleur d'un obstacle
+    - [X] Modifier la couleur d'un obstacle
 
 # INTERFACE GRAPHIQUE
 - [ ] Chargement de la grille via un fichier

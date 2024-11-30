@@ -24,3 +24,8 @@ class ChangeObstacleColor (Enum):
 
 class BallCollision (Enum):
     SIMULATE_FOOD_CHAIN = auto()
+
+
+class PlayerChoices (Enum):
+    CHANGE_OBSTACLE_COLOR = "Change la couleur de l'obstacle de ton choix"
+    ADD_OBSTACLE = "Ajouter un obstacle"
