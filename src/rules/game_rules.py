@@ -9,7 +9,8 @@ from typing import Optional
 
 
 class GameRules ():
-    def __init__(self, num_rows: int, num_columns: int, num_obstacles: int, num_balls: int, size: int,
+    def __init__(self, num_rows: int, num_columns: int, num_obstacles: int, num_balls: int, size: int, speed: float,
+
                  obstacle_setup: ItemSetup, ball_setup: ItemSetup, item_type: ItemnType,
 
                  obstacle_color: dict,
@@ -38,7 +39,7 @@ class GameRules ():
                 game.model.obstacle_colors = obstacle_in_game_color_change
 
             while game.model.balls:
-                sleep(1)
+                sleep(speed)
                 if players:
                     game.players_turn(players, players_choices)
 

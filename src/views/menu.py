@@ -57,24 +57,26 @@ class Menu:
             frame, "Nombre de boules", 3, self.screen)
         self.size = integer_entry(
             frame, "Taille de la grille", 4, self.screen)
+        self.speed = integer_entry(
+            frame, "Vitesse du jeu (s)", 5, self.screen)
 
         # ---------- BUTTON  ----------
 
         next_button = tk.Button(frame, text="Configuration personalisé",
                                 command=lambda: self.show_frame(self.frame2))
-        next_button.grid(row=5, column=0, columnspan=2, pady=10)
+        next_button.grid(row=6, column=0, columnspan=2, pady=10)
 
         base_game_button = tk.Button(frame, text="Jeu de base",
                                      command=lambda: self.play_game_mode("base"))
-        base_game_button.grid(row=6, column=0, columnspan=1, pady=5)
+        base_game_button.grid(row=7, column=0, columnspan=1, pady=5)
 
         trap_game_button = tk.Button(frame, text="Jeu de trap",
                                      command=lambda: self.play_game_mode("trap"))
-        trap_game_button.grid(row=6, column=1, columnspan=1, pady=5)
+        trap_game_button.grid(row=7, column=1, columnspan=1, pady=5)
 
         prv_game_button = tk.Button(frame, text="Poule Renard Vipere",
                                     command=lambda: self.play_game_mode("prv"))
-        prv_game_button.grid(row=7, column=0, columnspan=2, pady=5)
+        prv_game_button.grid(row=8, column=0, columnspan=2, pady=5)
 
         return frame
 
@@ -228,19 +230,20 @@ class Menu:
         num_obstacles = int(self.num_obstacles.get())
         num_balls = int(self.num_balls.get())
         size = int(self.size.get())
+        speed = float(self.speed.get())
 
         # Ferme la fenetre
         self.screen.destroy()
 
         if mode == "base":
             base_game(num_rows=num_rows, num_columns=num_columns,
-                      num_obstacles=num_obstacles, num_balls=num_balls, size=size)
+                      num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed)
         elif mode == "trap":
             trap_game(num_rows=num_rows, num_columns=num_columns,
-                      num_obstacles=num_obstacles, num_balls=num_balls, size=size)
+                      num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed)
         elif mode == "prv":
             poule_renard_vipere_game(num_rows=num_rows, num_columns=num_columns,
-                                     num_obstacles=num_obstacles, num_balls=num_balls, size=size)
+                                     num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed)
 
     def submit_game_rules(self):
         """
@@ -252,6 +255,7 @@ class Menu:
         num_obstacles = int(self.num_obstacles.get())
         num_balls = int(self.num_balls.get())
         size = int(self.size.get())
+        speed = float(self.speed.get())
 
         obstacle_setup = ItemSetup[self.obstacle_setup.get()]
         ball_setup = ItemSetup[self.ball_setup.get()]
@@ -296,7 +300,7 @@ class Menu:
         self.screen.destroy()
 
         self.game_rules = GameRules(
-            num_rows=num_rows, num_columns=num_columns, num_obstacles=num_obstacles, num_balls=num_balls, size=size,
+            num_rows=num_rows, num_columns=num_columns, num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed,
             obstacle_setup=obstacle_setup, ball_setup=ball_setup, item_type=item_type,
             obstacle_color=obstacle_colors_and_weights,
             obstacle_in_game_color_change=obstacle_in_game_color_change,
