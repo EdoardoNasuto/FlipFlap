@@ -11,24 +11,23 @@ class Grid:
     dans la grille et interagissent avec les obstacles.
 
     Attributes:
-        num_rows (int): Le nombre de lignes (hauteur) de la grille.
-        num_columns (int): Le nombre de colonnes (largeur) de la grille.
-        grid (List[List[Optional[Obstacle]]]): La matrice représentant la grille, où chaque case contient 
+        num_rows (int): Nombre de lignes (hauteur) de la grille.
+        num_columns (int): Nombre de colonnes (largeur) de la grille.
+        grid (List[List[Optional[Obstacle]]]): Matrice représentant la grille, où chaque case contient 
             soit un obstacle, soit `None` si elle est vide.
-        balls (List[Ball]): La liste des billes présentes dans la grille, avec leurs positions et directions.
-        obstacle_colors (List[str]): Liste des couleurs disponibles pour les obstacles, héritée de `Obstacle`.
-        ball_directions (List[str]): Liste des directions possibles pour les billes, héritée de `Ball`.
+        balls (List[Ball]): Liste des billes présentes dans la grille, avec leurs positions et directions.
+        obstacle_colors (dict): Dictionnaire des couleurs disponibles pour les obstacles, héritées de `Obstacle`.
+        ball_directions (List[str]): Liste des directions possibles pour les billes, héritées de `Ball`.
+        ball_animals (List[str]): Liste des animaux associés aux billes, héritée de `Ball`.
     """
 
     def __init__(self, num_rows: int, num_columns: int):
         """
-        Initialise une grille de jeu avec un certain nombre de lignes, colonnes, obstacles, et billes.
+        Initialise une grille de jeu avec un certain nombre de lignes et de colonnes.
 
         Args:
-            num_rows (int): Le nombre de lignes (hauteur) de la grille.
-            num_columns (int): Le nombre de colonnes (largeur) de la grille.
-            num_obstacles (int): Le nombre d'obstacles à placer dans la grille.
-            num_balls (int): Le nombre de billes à placer dans la grille.
+            num_rows (int): Nombre de lignes de la grille.
+            num_columns (int): Nombre de colonnes de la grille.
         """
         self.num_rows = num_rows
         self.num_columns = num_columns
@@ -39,32 +38,39 @@ class Grid:
         self.ball_directions = Ball.available_directions
         self.ball_animals = Ball.available_animals
 
-    def add_obstacle(self, x: int, y: int, color: str) -> None:
+    def add_obstacle(self, x: int, y: int, color: str) -> Obstacle:
         """
         Ajoute un obstacle à la grille à la position (x, y).
 
         Args:
-            x (int): La position en x de l'obstacle.
-            y (int): La position en y de l'obstacle.
-            color (str): La couleur de l'obstacle.
+            x (int): Position X de l'obstacle.
+            y (int): Position Y de l'obstacle.
+            color (str): Couleur de l'obstacle.
+
+        Returns:
+            Obstacle: L'obstacle ajouté.
         """
         self.grid[y][x] = Obstacle(x, y, color)
         return self.grid[y][x]
 
     def add_ball(self, x: int,  y: int, direction: str, animal: str = None) -> None:
         """
-        Ajoute une bille à la grille.
+        Ajoute une bille à la grille à la position (x, y).
 
         Args:
-            x (int): La position en x de la bille.
-            y (int): La position en y de la bille.
-            direction (str): la direction de la bille.
+            x (int): Position X de la bille.
+            y (int): Position Y de la bille.
+            direction (str): Direction initiale de la bille ('left', 'right', 'up', 'down').
+            animal (str): Type d'animal associé à la bille. Par défaut, None.
+
+        Returns:
+            Ball: La bille ajoutée.
         """
         ball = Ball(x, y, direction, animal)
         self.balls.append(ball)
         return ball
 
-    def remove_ball(self, ball):
+    def remove_ball(self, ball) -> None:
         """
         Supprime une bille de la grille.
 
@@ -75,25 +81,13 @@ class Grid:
 
     def is_valid_position(self, x: int, y: int) -> bool:
         """
-        Vérifie si la position(x, y) est valide(dans les limites de la grille).
+        Vérifie si la position (x, y) est dans les limites de la grille.
 
         Args:
-            x(int): La position en x.
-            y(int): La position en y.
+            x (int): Position X
+            y (int): Position Y
 
         Returns:
             bool: True si la position est valide, sinon False.
         """
         return 0 <= x < self.num_columns and 0 <= y < self.num_rows
-
-    def display(self) -> str:
-        """
-        Affiche la grille avec les obstacles et billes pour le débogage.
-        """
-        for row in self.grid:
-            for element in row:
-                if element:
-                    print(str(element.color).center(10), end="|")
-                else:
-                    print("".center(10), end="|")
-            print(), print("-"*11*len(row))

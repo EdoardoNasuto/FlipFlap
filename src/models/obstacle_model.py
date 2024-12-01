@@ -3,10 +3,10 @@ from src.models.ball_model import Ball
 
 class Obstacle:
     """
-    Représente un obstacle sur la grille qui peut affecter les billes.
+    Représente un obstacle sur la grille qui peut affecter les billes en modifiant leur trajectoire.
 
     Attributes:
-        available_colors (list): Les couleurs que l'obstacle peut prendre.
+        available_colors (list): Les couleurs que l'obstacle peut prendre par défault.
         x (int): La position en x de l'obstacle.
         y (int): La position en y de l'obstacle.
         color (str): La couleur de l'obstacle, déterminant son effet sur les billes.
@@ -28,12 +28,17 @@ class Obstacle:
         self.color = color
         self.object_view = None
 
-    def affect_ball(self, ball: Ball) -> None:
+    def affect_ball(self, ball: Ball) -> str | None:
         """
         Applique l'effet de l'obstacle sur la bille en fonction de la couleur de l'obstacle.
 
         Args:
-            ball (Ball): La bille sur laquelle l'obstacle aura un effet.
+            ball (Ball): Bille sur laquelle l'obstacle a un effet.
+
+        Returns:
+            str | None: Une action spécifique si la couleur est "white" ou "purple", sinon None.
+            - "delete": Supprime la bille.
+            - "new_ball": Crée une nouvelle bille.
         """
         if self.color == "blue":
             ball.turn_right()

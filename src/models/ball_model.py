@@ -3,11 +3,14 @@ class Ball:
     Représente une bille se déplaçant dans une grille.
 
     Attributes:
-        available_directions (list): Les directions que la bille peut prendre.
+        available_directions (list): Liste des directions possibles pour la bille.
+        available_animals (list): Liste des animaux disponibles associés à la bille
         x (int): La position actuelle en x de la bille.
         y (int): La position actuelle en y de la bille.
         direction (str): La direction actuelle de la bille parmi 'available_directions'.
-        object_view (Any): L'objet graphique représentant la bille.
+        animal (str): Type d'animal associé à la bille.
+        object_view (Any): Représentation graphique de la bille (par défaut None).
+        direction_view (Any): Représentation graphique de la direction de la bille (par défaut None).
     """
     available_directions = ["left", "up", "right", "down"]
     available_animals = ["poule", "renard", "vipere"]
@@ -20,6 +23,7 @@ class Ball:
             x (int): Position x initiale.
             y (int): Position y initiale.
             direction (str): Direction initiale.
+            animal (str): Type d'animal associé à la bille.
         """
         self.x = x
         self.y = y
@@ -28,8 +32,16 @@ class Ball:
         self.object_view = None
         self.direction_view = None
 
-    def move(self, test: bool = False) -> None:
-        """Déplace la bille en fonction de sa direction."""
+    def move(self, test: bool = False) -> tuple[int, int] | None:
+        """
+        Déplace la bille en fonction de sa direction actuelle.
+
+        Args:
+            test (bool): Si True, retourne le déplacement sans modifier les coordonnées de la bille.
+
+        Returns:
+            tuple[int, int] | None: Les déplacements en X et Y si 'test' est True, sinon None.
+        """
         moves = {
             "left": (-1, 0),
             "right": (1, 0),
