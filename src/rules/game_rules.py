@@ -9,7 +9,7 @@ from typing import Optional
 
 
 class GameRules ():
-    def __init__(self, num_rows: int, num_columns: int, num_obstacles: int, num_balls: int, size: int, speed: float,
+    def __init__(self, num_rows: int, num_columns: int, num_obstacles: int, num_balls: int, size: int, speed: float, json_filename: str,
 
                  obstacle_setup: ItemSetup, ball_setup: ItemSetup, item_type: ItemnType,
 
@@ -28,7 +28,7 @@ class GameRules ():
         def setup_game():
             Obstacle.available_colors = obstacle_color
             setup_controller.setup_model(
-                obstacle_setup, ball_setup, item_type)
+                obstacle_setup, ball_setup, item_type, json_filename)
             setup_controller.setup_view()
 
         def run_game():

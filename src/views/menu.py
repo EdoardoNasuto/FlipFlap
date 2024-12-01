@@ -60,23 +60,29 @@ class Menu:
         self.speed = integer_entry(
             frame, "Vitesse du jeu (s)", 5, self.screen)
 
+        self.json_filename = tk.Entry(frame)
+        self.json_filename.grid(row=6, column=1, padx=5, pady=5)
+        label_filename = tk.Label(
+            frame, text="Nom du fichier JSON")
+        label_filename.grid(row=6, column=0, padx=5, pady=5)
+
         # ---------- BUTTON  ----------
 
         next_button = tk.Button(frame, text="Configuration personalisé",
                                 command=lambda: self.show_frame(self.frame2))
-        next_button.grid(row=6, column=0, columnspan=2, pady=10)
+        next_button.grid(row=7, column=0, columnspan=2, pady=10)
 
         base_game_button = tk.Button(frame, text="Jeu de base",
                                      command=lambda: self.play_game_mode("base"))
-        base_game_button.grid(row=7, column=0, columnspan=1, pady=5)
+        base_game_button.grid(row=8, column=0, columnspan=1, pady=5)
 
         trap_game_button = tk.Button(frame, text="Jeu de trap",
                                      command=lambda: self.play_game_mode("trap"))
-        trap_game_button.grid(row=7, column=1, columnspan=1, pady=5)
+        trap_game_button.grid(row=8, column=1, columnspan=1, pady=5)
 
         prv_game_button = tk.Button(frame, text="Poule Renard Vipere",
                                     command=lambda: self.play_game_mode("prv"))
-        prv_game_button.grid(row=8, column=0, columnspan=2, pady=5)
+        prv_game_button.grid(row=9, column=0, columnspan=2, pady=5)
 
         return frame
 
@@ -225,11 +231,15 @@ class Menu:
             mode (str): Le mode de jeu à lancer ("base", "trap", "prv").
         """
         # Récupérer et traiter les informations saisies
-        num_rows = int(self.num_rows.get())
-        num_columns = int(self.num_columns.get())
-        num_obstacles = int(self.num_obstacles.get())
-        num_balls = int(self.num_balls.get())
-        size = int(self.size.get())
+        json_filename = str(self.json_filename.get()
+                            ) if self.json_filename != "" else None
+
+        num_rows = int(self.num_rows.get()) if not json_filename else None
+        num_columns = int(self.num_columns.get())if not json_filename else None
+        num_obstacles = int(self.num_obstacles.get()
+                            )if not json_filename else None
+        num_balls = int(self.num_balls.get())if not json_filename else None
+        size = int(self.size.get())if not json_filename else None
         speed = float(self.speed.get())
 
         # Ferme la fenetre
@@ -237,24 +247,28 @@ class Menu:
 
         if mode == "base":
             base_game(num_rows=num_rows, num_columns=num_columns,
-                      num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed)
+                      num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed, json_filename=json_filename)
         elif mode == "trap":
             trap_game(num_rows=num_rows, num_columns=num_columns,
-                      num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed)
+                      num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed, json_filename=json_filename)
         elif mode == "prv":
             poule_renard_vipere_game(num_rows=num_rows, num_columns=num_columns,
-                                     num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed)
+                                     num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed, json_filename=json_filename)
 
     def submit_game_rules(self):
         """
         Récupère les règles configurées et lance le jeu en utilisant ces règles.
         """
         # Récupérer et traiter les informations saisies
-        num_rows = int(self.num_rows.get())
-        num_columns = int(self.num_columns.get())
-        num_obstacles = int(self.num_obstacles.get())
-        num_balls = int(self.num_balls.get())
-        size = int(self.size.get())
+        json_filename = str(self.json_filename.get()
+                            ) if self.json_filename != "" else None
+
+        num_rows = int(self.num_rows.get()) if not json_filename else None
+        num_columns = int(self.num_columns.get())if not json_filename else None
+        num_obstacles = int(self.num_obstacles.get()
+                            )if not json_filename else None
+        num_balls = int(self.num_balls.get())if not json_filename else None
+        size = int(self.size.get())if not json_filename else None
         speed = float(self.speed.get())
 
         obstacle_setup = ItemSetup[self.obstacle_setup.get()]
@@ -300,7 +314,7 @@ class Menu:
         self.screen.destroy()
 
         self.game_rules = GameRules(
-            num_rows=num_rows, num_columns=num_columns, num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed,
+            num_rows=num_rows, num_columns=num_columns, num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed, json_filename=json_filename,
             obstacle_setup=obstacle_setup, ball_setup=ball_setup, item_type=item_type,
             obstacle_color=obstacle_colors_and_weights,
             obstacle_in_game_color_change=obstacle_in_game_color_change,

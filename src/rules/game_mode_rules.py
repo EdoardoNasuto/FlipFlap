@@ -2,7 +2,7 @@ from src.rules.params_rule import *
 from src.rules.game_rules import *
 
 
-def base_game(num_rows, num_columns, num_obstacles, num_balls, size, speed):
+def base_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename):
     """
     Configure le mode de jeu de base avec des obstacles et des billes placés aléatoirement.
 
@@ -18,14 +18,14 @@ def base_game(num_rows, num_columns, num_obstacles, num_balls, size, speed):
         selon les proportions spécifiées. Les billes sont placées de manière aléatoire,
         et les billes qui sortent de la grille sont supprimées.
     """
-    GameRules(num_rows, num_columns, num_obstacles, num_balls, size, speed,
+    GameRules(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename,
               obstacle_setup=ItemSetup.RANDOM, ball_setup=ItemSetup.RANDOM, item_type=ItemnType.BALLS,
               obstacle_color={"red": 0.34,
                               "blue": 0.33, "green": 0.33},
               ball_out_of_the_board=BallOutOfTheBoard.DELETE)
 
 
-def trap_game(num_rows, num_columns, num_obstacles, num_balls, size, speed):
+def trap_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename):
     """
     Configure le mode de jeu 'trap' avec des obstacles et des billes placés de manière spécifique.
 
@@ -42,7 +42,7 @@ def trap_game(num_rows, num_columns, num_obstacles, num_balls, size, speed):
         traversent la grille au lieu d'être supprimées lorsqu'elles en sortent. Les joueurs peuvent également
         changer la couleur des obstacles ou ajouter des obstacles sur la grille.
     """
-    GameRules(num_rows, num_columns, num_obstacles, num_balls, size, speed,
+    GameRules(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename,
               obstacle_setup=ItemSetup.EQUALLY, ball_setup=ItemSetup.RANDOM, item_type=ItemnType.BALLS,
               obstacle_color={"red": 0.40, "blue": 0.30,
                               "green": 0.20, "white": 0.10},
@@ -53,7 +53,7 @@ def trap_game(num_rows, num_columns, num_obstacles, num_balls, size, speed):
               change_obstacle_color_on_click=ChangeObstacleColor.RANDOM)
 
 
-def poule_renard_vipere_game(num_rows, num_columns, num_obstacles, num_balls, size, speed):
+def poule_renard_vipere_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename):
     """
     Configure le mode de jeu 'Poule, Renard, Vipère' avec des animaux comme billes.
 
@@ -71,7 +71,7 @@ def poule_renard_vipere_game(num_rows, num_columns, num_obstacles, num_balls, si
         les billes, simulant une chaîne alimentaire. Les joueurs peuvent choisir d'ajouter des obstacles ou
         de modifier les couleurs des obstacles.
     """
-    GameRules(num_rows, num_columns, num_obstacles, num_balls, size, speed,
+    GameRules(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename,
 
               obstacle_setup=ItemSetup.RANDOM, ball_setup=ItemSetup.EQUALLY, item_type=ItemnType.ANIMALS,
 

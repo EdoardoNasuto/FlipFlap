@@ -34,7 +34,7 @@ class SetupController:
 
     # ------------------- Public Methods -------------------
 
-    def setup_model(self, random_obstacle: ItemSetup, random_balls: ItemSetup, ball_item: ItemnType) -> None:
+    def setup_model(self, random_obstacle: ItemSetup, random_balls: ItemSetup, ball_item: ItemnType, json_filename: str = None) -> None:
         """
         Configure le modèle de jeu en initialisant la grille, les obstacles et les billes.
 
@@ -43,11 +43,14 @@ class SetupController:
             random_balls (ItemSetup): La méthode de placement des billes (EQUALLY ou RANDOM).
             ball_item (ItemnType): Le type d'élément à associer aux billes (par exemple, animaux).
         """
-        self.model = Grid(self.num_rows, self.num_columns)
-        coords_obstacle, coords_balls = self._setup_items_coords(
-            random_obstacle, random_balls)
-        self._setup_obstacles(self.num_obstacles, coords_obstacle)
-        self._setup_balls(self.num_balls, coords_balls, ball_item)
+        if json_filename:
+            self.import_from_json(json_filename)
+        else:
+            self.model = Grid(self.num_rows, self.num_columns)
+            coords_obstacle, coords_balls = self._setup_items_coords(
+                random_obstacle, random_balls)
+            self._setup_obstacles(self.num_obstacles, coords_obstacle)
+            self._setup_balls(self.num_balls, coords_balls, ball_item)
 
     def setup_view(self) -> None:
         """
@@ -231,3 +234,107 @@ class SetupController:
                 ball.object_view = self.view.draw_ball(
                     ball, f"assets/{ball.animal}.png")
                 self.view.update_ball_direction_arrow(ball)
+
+    # -------------
+    def export_to_json(self, filename: str) -> None:
+        import json
+        """
+        Exporte les données du modèle (grille, obstacles, billes) au format JSON.
+
+        Args:
+            filename (str): Le nom du fichier où les données seront sauvegardées.
+        """
+        data = {
+            'num_rows': self.num_rows,
+            'num_columns': self.num_columns,
+            'num_obstacles': self.num_obstacles,
+            'num_balls': self.num_balls,
+            'size': self.size,
+            'grid': self._export_grid(),
+            'obstacles': self._export_obstacles(),
+            'balls': self._export_balls(),
+        }
+
+        with open(filename, 'w') as file:
+            json.dump(data, file, indent=4)
+
+    def _export_grid(self) -> list:
+        """
+        Exporte les données de la grille (les coordonnées de chaque case) au format liste.
+
+        Returns:
+            list: Liste des coordonnées de la grille.
+        """
+        return [[(x, y) for x in range(self.num_columns)] for y in range(self.num_rows)]
+
+    def _export_obstacles(self) -> list:
+        """
+        Exporte les obstacles présents dans la grille.
+
+        Returns:
+            list: Liste des obstacles avec leurs coordonnées et couleurs.
+        """
+        obstacles = []
+        for column in range(self.model.num_columns):
+            for row in range(self.model.num_rows):
+                obstacle = self.model.grid[row][column]
+                if obstacle:
+                    obstacles.append({
+                        'x': obstacle.x,
+                        'y': obstacle.y,
+                        'color': obstacle.color
+                    })
+        return obstacles
+
+    def _export_balls(self) -> list:
+        """
+        Exporte les billes présentes dans la grille.
+
+        Returns:
+            list: Liste des billes avec leurs coordonnées et direction.
+        """
+        balls = []
+        for ball in self.model.balls:
+            balls.append({
+                'x': ball.x,
+                'y': ball.y,
+                'direction': ball.direction,
+                'animal': ball.animal
+            })
+        return balls
+
+    def import_from_json(self, filename) -> None:
+        import json
+        """
+        Importe les données du jeu depuis un fichier JSON et initialise la grille, les obstacles et les billes.
+
+        Cette méthode charge les données du fichier JSON et les utilise pour configurer le jeu.
+        """
+        try:
+            with open(filename, 'r') as file:
+                data = json.load(file)
+
+            self.num_rows = data.get('num_rows', self.num_rows)
+            self.num_columns = data.get('num_columns', self.num_columns)
+            self.num_obstacles = data.get('num_obstacles', self.num_obstacles)
+            self.num_balls = data.get('num_balls', self.num_balls)
+            self.size = data.get('size', self.size)
+
+            # Recréer le modèle de la grille
+            self.model = Grid(self.num_rows, self.num_columns)
+
+            # Importer les obstacles
+            for obstacle_data in data.get('obstacles', []):
+                self.model.add_obstacle(
+                    obstacle_data['x'], obstacle_data['y'], obstacle_data['color'])
+
+            # Importer les billes
+            for ball_data in data.get('balls', []):
+                self.model.add_ball(
+                    ball_data['x'], ball_data['y'], ball_data['direction'], ball_data.get('animal'))
+
+        except FileNotFoundError:
+            print(f"Le fichier {self.json_filename} n'a pas été trouvé.")
+        except json.JSONDecodeError:
+            print(
+                f"Erreur de décodage JSON dans le fichier {self.json_filename}.")
