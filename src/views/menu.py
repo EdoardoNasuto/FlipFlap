@@ -76,19 +76,19 @@ class Menu:
 
         next_button = tk.Button(frame, text="Configuration personalisé",
                                 command=lambda: self.show_frame(self.frame2))
-        next_button.grid(row=7, column=0, columnspan=2, pady=10)
+        next_button.grid(row=8, column=0, columnspan=2, pady=10)
 
         base_game_button = tk.Button(frame, text="Jeu de base",
                                      command=lambda: self.play_game_mode("base"))
-        base_game_button.grid(row=8, column=0, columnspan=1, pady=5)
+        base_game_button.grid(row=9, column=0, columnspan=1, pady=5)
 
         trap_game_button = tk.Button(frame, text="Jeu de trap",
                                      command=lambda: self.play_game_mode("trap"))
-        trap_game_button.grid(row=8, column=1, columnspan=1, pady=5)
+        trap_game_button.grid(row=9, column=1, columnspan=1, pady=5)
 
         prv_game_button = tk.Button(frame, text="Poule Renard Vipere",
                                     command=lambda: self.play_game_mode("prv"))
-        prv_game_button.grid(row=9, column=0, columnspan=2, pady=5)
+        prv_game_button.grid(row=10, column=0, columnspan=2, pady=5)
 
         return frame
 
