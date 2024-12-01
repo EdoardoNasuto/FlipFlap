@@ -181,12 +181,6 @@ class GameController:
                     if ((self.model.ball_animals.index(ball.animal) - 1) % len(self.model.ball_animals)) == self.model.ball_animals.index(other_ball.animal):
                         self.remove_ball(ball)
 
-    def rebound_ball_at_collision(self):
-        """
-        Gère le rebond des billes lors des collisions.
-        """
-        pass
-
     # ------------------- Private Methods -------------------
 
     def _change_obstacle_color(self, obstacle: Obstacle, mode, add_mode=None) -> None:
