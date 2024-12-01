@@ -58,7 +58,7 @@ class Menu:
         self.size = integer_entry(
             frame, "Taille de la grille", 4, self.screen)
         self.speed = integer_entry(
-            frame, "Vitesse du jeu (s)", 5, self.screen)
+            frame, "Vitesse du jeu (1/10 s)", 5, self.screen)
 
         self.json_filename = tk.Entry(frame)
         self.json_filename.grid(row=6, column=1, padx=5, pady=5)

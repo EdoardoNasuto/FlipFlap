@@ -39,7 +39,7 @@ class GameRules ():
                 game.model.obstacle_colors = obstacle_in_game_color_change
 
             while game.model.balls:
-                sleep(speed)
+                sleep(speed/10)
                 if players:
                     game.players_turn(players, players_choices)
 
