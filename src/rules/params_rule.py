@@ -27,5 +27,5 @@ class BallCollision (Enum):
 
 
 class PlayerChoices (Enum):
-    CHANGE_OBSTACLE_COLOR = "Change la couleur de l'obstacle de ton choix"
+    CHANGE_OBSTACLE_COLOR = "Changer la couleur d'un obstacle"
     ADD_OBSTACLE = "Ajouter un obstacle"

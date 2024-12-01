@@ -182,10 +182,12 @@ class Menu:
         frame = tk.Frame(self.screen)
 
         # ---------- PARAMETERS  ----------
-
-        self.players = integer_entry(
-            frame, "Nombre de joueurs", 0, self.screen)
-        self.players_choices = player_choices(frame, 1)
+        self.players = checkbutton(frame, "Mode Multijouer", 0)
+        self.players_choices = []
+        self.players_choices.append(checkbutton(
+            frame, "Changer la couleur d'un obstacle", 1))
+        self.players_choices.append(checkbutton(
+            frame, "Ajouter un obstacle", 2))
 
         # ---------- BUTTON  ----------
 
@@ -195,7 +197,7 @@ class Menu:
 
         validate_button = tk.Button(frame, text="Jouer",
                                     command=lambda: self.submit_game_rules())
-        validate_button.grid(row=3, column=1, columnspan=2, pady=10)
+        validate_button.grid(row=4, column=0, columnspan=2, pady=10)
 
         return frame
 
@@ -277,12 +279,19 @@ class Menu:
         ball_collision = BallCollision[self.ball_collision.get(
         )] if self.ball_collision.get() else None
 
-        try:
-            players = int(self.players.get())
-        except:
-            players = None
-        players_choices = [PlayerChoices(
-            choice.get()) for choice in self.players_choices if choice.get()]
+        players = 3 if bool(self.players.get()) else None
+        player_choices = None
+
+        if players != None:
+            player_choices = []
+            print(self.change_obstacle_color_on_click)
+            if self.players_choices[0].get():
+                player_choices.append(
+                    [PlayerChoices.CHANGE_OBSTACLE_COLOR, change_obstacle_color_on_click])
+            if self.players_choices[1].get():
+                player_choices.append(
+                    [PlayerChoices.ADD_OBSTACLE, change_obstacle_color_on_click])
+            print(player_choices)
 
         self.screen.destroy()
 
@@ -296,5 +305,5 @@ class Menu:
             change_obstacle_color_if_ball_present=change_obstacle_color_if_ball_present,
             ball_collision=ball_collision,
             players=players,
-            players_choices=players_choices
+            players_choices=player_choices
         )

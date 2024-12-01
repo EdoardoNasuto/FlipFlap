@@ -83,28 +83,28 @@ def multiple_color_and_weight_input(parent: tk.Widget, label: str, row: int) -> 
     return list(zip(color_comboboxes, weight_entries))
 
 
-def player_choices(parent: tk.Widget, row: int) -> list:
+def checkbutton(parent: tk.Widget, text: str, row: int) -> bool:
     """
-    Crée des cases à cocher pour les choix des joueurs.
+    Crée un Checkbutton.
 
     Args:
-        parent (tk.Widget): Le widget parent dans lequel les cases à cocher seront placées.
-        row (int): La ligne de la grille où les widgets seront positionnés.
+        parent (tk.Widget): Le widget parent dans lequel le Checkbutton sera placé.
+        label (str): Le texte du label à afficher pour cette option.
+        row (int): La ligne de la grille où le widget sera positionné.
 
     Returns:
-        list: Une liste contenant les variables associées aux cases à cocher.
+        bool: True si le Checkbutton est coché, sinon False.
     """
-    tk.Label(parent, text="Choix des joueurs").grid(
-        row=row, column=0, padx=10, pady=5)
-    var1 = tk.IntVar()
-    var2 = tk.IntVar()
-    checkbox1 = tk.Checkbutton(
-        parent, text=PlayerChoices.CHANGE_OBSTACLE_COLOR.value, variable=var1)
-    checkbox2 = tk.Checkbutton(
-        parent, text=PlayerChoices.ADD_OBSTACLE.value, variable=var2)
-    checkbox1.grid(row=row, column=1, padx=10, pady=5)
-    checkbox2.grid(row=row, column=2, padx=10, pady=5)
-    return [var1, var2]
+    # Créer la variable associée au Checkbutton
+    var = tk.IntVar()
+
+    # Créer le Checkbutton et le placer dans la grille
+    checkbutton = tk.Checkbutton(
+        parent, text=text, variable=var
+    )
+    checkbutton.grid(row=row, column=1, padx=10, pady=5)
+
+    return var
 
 
 def _validate_integer(value: str) -> bool:
