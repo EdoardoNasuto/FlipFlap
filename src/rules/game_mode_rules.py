@@ -2,7 +2,7 @@ from src.rules.params_rule import *
 from src.rules.game_rules import *
 
 
-def base_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename, export_filename):
+def base_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename=None, export_filename=None):
     """
     Configure le mode de jeu de base avec des obstacles et des billes placés aléatoirement.
 
@@ -25,7 +25,7 @@ def base_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json
               ball_out_of_the_board=BallOutOfTheBoard.DELETE)
 
 
-def trap_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename, export_filename):
+def trap_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename=None, export_filename=None):
     """
     Configure le mode de jeu 'trap' avec des obstacles et des billes placés de manière spécifique.
 
@@ -53,7 +53,7 @@ def trap_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json
               change_obstacle_color_on_click=ChangeObstacleColor.RANDOM)
 
 
-def poule_renard_vipere_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename, export_filename):
+def poule_renard_vipere_game(num_rows, num_columns, num_obstacles, num_balls, size, speed, json_filename=None, export_filename=None):
     """
     Configure le mode de jeu 'Poule, Renard, Vipère' avec des animaux comme billes.
 
