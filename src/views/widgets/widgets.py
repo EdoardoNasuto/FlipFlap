@@ -3,7 +3,19 @@ from tkinter import ttk
 from src.rules.params_rule import PlayerChoices
 
 
-def integer_entry(parent, label, row, screen):
+def integer_entry(parent: tk.Widget, label: str, row: int, screen: tk.Tk) -> tk.Entry:
+    """
+    Crée un champ de saisie pour un entier, avec une validation des entrées.
+
+    Args:
+        parent (tk.Widget): Le widget parent dans lequel le champ de saisie sera placé.
+        label (str): Le texte du label à afficher pour ce champ.
+        row (int): La ligne de la grille où le widget sera positionné.
+        screen (tk.Tk): La fenêtre principale de l'application, utilisée pour enregistrer la validation.
+
+    Returns:
+        tk.Entry: Le champ de saisie créé.
+    """
     tk.Label(parent, text=label).grid(
         row=row, column=0, padx=10, pady=5)
 
@@ -14,7 +26,20 @@ def integer_entry(parent, label, row, screen):
     return entry
 
 
-def enum_combobox(parent, label, enum_class, row, optional=False):
+def enum_combobox(parent: tk.Widget, label: str, enum_class, row: int, optional: bool = False) -> ttk.Combobox:
+    """
+    Crée un menu déroulant (Combobox) pour sélectionner une valeur d'une enum.
+
+    Args:
+        parent (tk.Widget): Le widget parent dans lequel la combobox sera placée.
+        label (str): Le texte du label à afficher pour ce menu déroulant.
+        enum_class (Enum): La classe d'énumération contenant les valeurs à afficher.
+        row (int): La ligne de la grille où le widget sera positionné.
+        optional (bool): Si vrai, le combobox sera initialisé avec une valeur vide.
+
+    Returns:
+        ttk.Combobox: Le menu déroulant créé.
+    """
     tk.Label(parent, text=label).grid(row=row, column=0, padx=10, pady=5)
     choices = [item.name for item in enum_class]
     combobox = ttk.Combobox(parent, values=choices, state="readonly")
@@ -24,7 +49,18 @@ def enum_combobox(parent, label, enum_class, row, optional=False):
     return combobox
 
 
-def multiple_color_and_weight_input(parent, label, row):
+def multiple_color_and_weight_input(parent: tk.Widget, label: str, row: int) -> None:
+    """
+    Crée plusieurs champs de saisie pour associer des couleurs avec des poids.
+
+    Args:
+        parent (tk.Widget): Le widget parent dans lequel les champs seront placés.
+        label (str): Le texte du label à afficher pour cette section.
+        row (int): La ligne de la grille où les widgets seront positionnés.
+
+    Returns:
+        list: Une liste de tuples contenant les comboboxes de couleur et les champs de poids.
+    """
     colors = ["red", "blue", "green", "white", "purple"]
     row = row * len(colors)
     tk.Label(parent, text=label).grid(
@@ -47,7 +83,17 @@ def multiple_color_and_weight_input(parent, label, row):
     return list(zip(color_comboboxes, weight_entries))
 
 
-def player_choices(parent, row):
+def player_choices(parent: tk.Widget, row: int) -> list:
+    """
+    Crée des cases à cocher pour les choix des joueurs.
+
+    Args:
+        parent (tk.Widget): Le widget parent dans lequel les cases à cocher seront placées.
+        row (int): La ligne de la grille où les widgets seront positionnés.
+
+    Returns:
+        list: Une liste contenant les variables associées aux cases à cocher.
+    """
     tk.Label(parent, text="Choix des joueurs").grid(
         row=row, column=0, padx=10, pady=5)
     var1 = tk.IntVar()
@@ -61,7 +107,16 @@ def player_choices(parent, row):
     return [var1, var2]
 
 
-def _validate_integer(value):
+def _validate_integer(value: str) -> bool:
+    """
+    Fonction de validation pour s'assurer que la valeur saisie est un entier.
+
+    Args:
+        value (str): La valeur à valider.
+
+    Returns:
+        bool: Retourne True si la valeur est valide, sinon False.
+    """
     if value == "" or value.isdigit():
         return True
     else:

@@ -1,5 +1,5 @@
 from src.views.libs.tkiteasy import *
-from tkinter import Listbox
+from typing import List
 
 
 class GameView:
@@ -7,21 +7,20 @@ class GameView:
     Cette classe gère l'affichage de la grille, des obstacles, et des billes dans une fenêtre graphique.
 
     Attributes:
-        window (object): La fenêtre graphique utilisée pour afficher la grille et interagir avec l'utilisateur.
-        model (Grid): L'objet représentant la grille, contenant les obstacles et les billes.
-        size (int): La taille de chaque case de la grille, en pixels.
+        window (object): Fenêtre graphique pour l'affichage et les interactions utilisateur.
+        height (int): Hauteur de la fenêtre en pixels.
+        width (int): Largeur de la fenêtre en pixels.
+        size (int): Taille d'une case de la grille en pixels.
     """
 
     def __init__(self, num_rows: int, num_columns: int, size: int):
         """
-        Initialise l'interface graphique avec une grille et une taille de case spécifiée.
-
-        Crée la fenêtre de la simulation en fonction des dimensions de la grille et attend un clic pour démarrer.
+        Initialise la fenêtre de jeu avec une grille d'une taille spécifiée.
 
         Args:
-            num_rows (int): Le nombre de lignes de la grille.
-            num_columns (int): Le nombre de colonnes de la grille.
-            size (int): La taille de chaque case de la grille, en pixels.
+            num_rows (int): Nombre de lignes de la grille.
+            num_columns (int): Nombre de colonnes de la grille.
+            size (int): Taille d'une case de la grille en pixels.
         """
         self.window = ouvrirFenetre(num_columns*size, num_rows*size)
         self.height = num_rows * size
@@ -30,11 +29,11 @@ class GameView:
 
     def draw_grid(self, num_rows: int, num_columns: int) -> None:
         """
-        Dessine les cases de la grille.
+        Dessine une grille de lignes et de colonnes dans la fenêtre.
 
         Args:
-            num_rows (int): Le nombre de lignes de la grille.
-            num_columns (int): Le nombre de colonnes de la grille.
+            num_rows (int): Nombre de lignes.
+            num_columns (int): Nombre de colonnes.
         """
         for x in range(num_columns):
             self.window.dessinerLigne(
@@ -43,14 +42,18 @@ class GameView:
             self.window.dessinerLigne(
                 0, y*self.size, self.width, y*self.size, "white")
 
-    def draw_obstacle(self, column: int, row: int, color: str) -> None:
+    def draw_obstacle(self, column: int, row: int, color: str) -> ObjetGraphique:
         """
         Dessine un obstacle à une position donnée sur la grille.
 
         Args:
-            column (int): La colonne où dessiner l'obstacle.
-            row (int): La ligne où dessiner l'obstacle.
-            color (str): La couleur de l'obstacle à dessiner.
+            column (int): Colonne de l'obstacle.
+            row (int): Ligne de l'obstacle.
+            color (str): Couleur de l'obstacle.
+
+        Returns:
+            ObjetGraphique: L'objet graphique représentant l'obstacle dessiné.
+
         """
         return self.window.dessinerRectangle(
             column * self.size, row * self.size,
@@ -59,11 +62,11 @@ class GameView:
 
     def update_obstacle_color(self, obstacle: object, color: str):
         """
-        Met à jour la couleur d'un obstacle.
+        Modifie la couleur d'un obstacle existant.
 
         Args:
-            obstacle (object): L'objet représentant l'obstacle.
-            color (str): La nouvelle couleur de l'obstacle.
+            obstacle(object): L'objet représentant l'obstacle.
+            color(str): La nouvelle couleur de l'obstacle.
         """
         self.window.changerCouleur(obstacle, color)
 
@@ -72,7 +75,7 @@ class GameView:
         Récupère le clic de l'utilisateur.
 
         Returns:
-            tuple: La position du clic de l'utilisateur sous forme de coordonnées (x, y).
+            tuple: La position du clic de l'utilisateur sous forme de coordonnées(x, y).
         """
         return self.window.recupererClic()
 
@@ -81,19 +84,20 @@ class GameView:
         Récupère le clic de l'utilisateur.
 
         Returns:
-            tuple: La position du clic de l'utilisateur sous forme de coordonnées (x, y).
+            tuple: La position du clic de l'utilisateur sous forme de coordonnées(x, y).
         """
         return self.window.attendreClic()
 
-    def draw_ball(self, ball: object, file: str = None) -> object:
+    def draw_ball(self, ball: object, file: str = None) -> ObjetGraphique:
         """
-        Dessine une bille sur la grille à sa position actuelle.
+        Dessine une bille à sa position actuelle ou affiche une image.
 
         Args:
-            ball (object): L'objet représentant la bille à dessiner (attributs : `x`, `y`, `object_view`).
+            ball (object): Bille à dessiner (attributs : `x`, `y`).
+            file (Optional[str]): Chemin du fichier image à utiliser.
 
         Returns:
-            object: L'objet graphique représentant la bille (généré par `self.window.dessinerDisque`).
+            ObjetGraphique: Représentation graphique de la bille.
         """
         if not file:
             r = self.size/2
@@ -103,19 +107,25 @@ class GameView:
 
     def update_ball_position(self, ball: object, x1: int, y1: int, x2: int, y2: int) -> None:
         """
-        Déplace la bille de sa position actuelle `(x1, y1)` vers sa nouvelle position `(x2, y2)` dans la grille.
+        Déplace une bille d'une position initiale à une nouvelle position.
 
         Args:
-            ball (object): L'objet représentant la bille à déplacer.
-            x1 (int): Coordonnée x de la position actuelle de la bille.
-            y1 (int): Coordonnée y de la position actuelle de la bille.
-            x2 (int): Coordonnée x de la nouvelle position de la bille.
-            y2 (int): Coordonnée y de la nouvelle position de la bille.
+            ball (object): Bille à déplacer.
+            x1 (int): Position X initiale.
+            y1 (int): Position Y initiale.
+            x2 (int): Nouvelle position X.
+            y2 (int): Nouvelle position Y.
         """
         self.window.deplacer(ball, x2*self.size-x1 *
                              self.size, y2*self.size-y1*self.size)
 
-    def update_ball_direction_arrow(self, ball: object):
+    def update_ball_direction_arrow(self, ball: object) -> None:
+        """
+        Met à jour l'affichage de la flèche indiquant la direction de la bille.
+
+        Args:
+            ball (object): Bille avec sa direction et flèche à afficher.
+        """
         if ball.direction_view:
             for line in ball.direction_view:
                 self.window.supprimer(line)
@@ -143,31 +153,37 @@ class GameView:
         ball.direction_view = self.window.dessinerFleche(
             start_x, start_y, end_x, end_y, self.size / 8, "red", 4)
 
-    def remove_ball(self, ball_object: object, ball_direction: object) -> None:
+    def remove_ball(self, ball_object: object, ball_direction: List[object]) -> None:
         """
-        Supprime une bille de la grille.
+        Supprime une bille et sa flèche de direction.
 
         Args:
-            ball (object): L'objet représentant la bille à supprimer (attributs : `x`, `y`, `object_view`).
+            ball_object (object): Bille à supprimer.
+            ball_direction (List[object]): Flèche associée à la bille.
         """
         self.window.supprimer(ball_object)
         for line in ball_direction:
             self.window.supprimer(line)
 
     def refresh(self) -> None:
-        """
-        Actualise l'affichage de la fenêtre graphique.
-        """
+        """ Actualise l'affichage de la fenêtre graphique. """
         self.window.actualiser()
 
     def exit_game(self) -> None:
-        """
-        Termine la simulation et ferme la fenêtre graphique après un clic de l'utilisateur.
-        """
+        """ Termine la simulation et ferme la fenêtre graphique après un clic de l'utilisateur. """
         self.window.attendreClic()
         self.window.fermerFenetre()
 
     def listbox_popup(self, elements: list):
+        """
+        Affiche une fenêtre de sélection de liste et retourne l'élément choisi.
+
+        Args:
+            elements (list): Liste des éléments à afficher.
+
+        Returns:
+            Optional[int]: Index de l'élément sélectionné, ou None si aucune sélection.
+        """
         self.selected_index = None
 
         root = tk.Tk()

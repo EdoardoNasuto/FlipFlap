@@ -5,15 +5,28 @@ from src.views.widgets.widgets import *
 from src.rules.game_mode_rules import *
 
 
-class App:
+class Menu:
+    """
+    Cette classe utilise Tkinter pour créer une série d'écrans permettant aux utilisateurs 
+    de personnaliser les paramètres du jeu, y compris la taille de la grille, le nombre d'obstacles, 
+    le type d'éléments, et les règles avancées. Les paramètres configurés sont ensuite utilisés 
+    pour lancer différentes variantes du jeu.
+    """
+
     def __init__(self, root):
+        """
+        Initialise l'application et configure l'interface graphique principale.
+
+        Args:
+            root (tk.Tk): La fenêtre principale Tkinter.
+        """
         self.screen = root
         self.screen.title("Interface de Configuration des Règles du Jeu")
 
         # Variables pour stocker les informations saisies
         self.game_rules = None
 
-        # Frames pour chaque écran
+        # Création des frames pour chaque écran
         self.frame1 = self.create_frame1()
         self.frame2 = self.create_frame2()
         self.frame3 = self.create_frame3()
@@ -24,9 +37,16 @@ class App:
         self.frame1.pack()
 
     def create_frame1(self):
+        """
+        Crée la première interface utilisateur pour configurer les paramètres de base du jeu.
+
+        Returns:
+            tk.Frame: Frame contenant les widgets pour les paramètres de base.
+        """
         frame = tk.Frame(self.screen)
 
         # ---------- PARAMETERS  ----------
+
         self.num_rows = integer_entry(
             frame, "Nombre de lignes", 0, self.screen)
         self.num_columns = integer_entry(
@@ -39,6 +59,7 @@ class App:
             frame, "Taille de la grille", 4, self.screen)
 
         # ---------- BUTTON  ----------
+
         next_button = tk.Button(frame, text="Configuration personalisé",
                                 command=lambda: self.show_frame(self.frame2))
         next_button.grid(row=5, column=0, columnspan=2, pady=10)
@@ -58,9 +79,16 @@ class App:
         return frame
 
     def create_frame2(self):
+        """
+        Crée la deuxième interface utilisateur pour configurer les éléments du jeu.
+
+        Returns:
+            tk.Frame: Frame contenant les widgets pour configurer les éléments.
+        """
         frame = tk.Frame(self.screen)
 
         # ---------- PARAMETERS  ----------
+
         self.item_type = enum_combobox(
             frame, "Type d'élément", ItemnType, 0)
 
@@ -71,6 +99,7 @@ class App:
             frame, "Setup des boules", ItemSetup, 2)
 
         # ---------- BUTTON  ----------
+
         prev_button = tk.Button(frame, text="Précédent",
                                 command=lambda: self.show_frame(self.frame1))
         prev_button.grid(row=3, column=0, pady=10)
@@ -81,9 +110,16 @@ class App:
         return frame
 
     def create_frame3(self):
+        """
+        Crée la troisième interface utilisateur pour configurer les couleurs et les poids des obstacles.
+
+        Returns:
+            tk.Frame: Frame contenant les widgets pour configurer les obstacles.
+        """
         frame = tk.Frame(self.screen)
 
         # ---------- PARAMETERS  ----------
+
         self.obstacle_colors_and_weights = multiple_color_and_weight_input(
             frame, "Couleurs et poids des obstacles", 0)
 
@@ -91,6 +127,7 @@ class App:
             frame, "Couleurs et poids des obstacles in game", 1)
 
         # ---------- BUTTON  ----------
+
         prev_button = tk.Button(frame, text="Précédent",
                                 command=lambda: self.show_frame(self.frame2))
         prev_button.grid(row=12, column=0, pady=10)
@@ -101,9 +138,16 @@ class App:
         return frame
 
     def create_frame4(self):
+        """
+        Crée la quatrième interface utilisateur pour configurer les règles avancées du jeu.
+
+        Returns:
+            tk.Frame: Frame contenant les widgets pour configurer les règles avancées.
+        """
         frame = tk.Frame(self.screen)
 
         # ---------- PARAMETERS  ----------
+
         self.ball_out_of_the_board = enum_combobox(
             frame, "Ball Out of the Board", BallOutOfTheBoard, 0, optional=True)
 
@@ -117,6 +161,7 @@ class App:
             frame, "Ball Collision", BallCollision, 4, optional=True)
 
         # ---------- BUTTON  ----------
+
         prev_button = tk.Button(frame, text="Précédent",
                                 command=lambda: self.show_frame(self.frame3))
         prev_button.grid(row=5, column=0, pady=10)
@@ -128,14 +173,22 @@ class App:
         return frame
 
     def create_frame5(self):
+        """
+        Crée la cinquième interface utilisateur pour configurer les joueurs.
+
+        Returns:
+            tk.Frame: Frame contenant les widgets pour la configuration des joueurs.
+        """
         frame = tk.Frame(self.screen)
 
         # ---------- PARAMETERS  ----------
+
         self.players = integer_entry(
             frame, "Nombre de joueurs", 0, self.screen)
         self.players_choices = player_choices(frame, 1)
 
         # ---------- BUTTON  ----------
+
         prev_button = tk.Button(frame, text="Précédent",
                                 command=lambda: self.show_frame(self.frame3))
         prev_button.grid(row=3, column=0, columnspan=2, pady=10)
@@ -147,6 +200,12 @@ class App:
         return frame
 
     def show_frame(self, frame_to_show):
+        """
+        Affiche un frame spécifique en masquant les autres frames.
+
+        Args:
+            frame_to_show (tk.Frame): Frame à afficher.
+        """
         # Masquer tous les autres frames
         for frame in [self.frame1, self.frame2, self.frame3, self.frame4, self.frame5]:
             frame.pack_forget()
@@ -155,6 +214,12 @@ class App:
         frame_to_show.pack()
 
     def play_game_mode(self, mode):
+        """
+        Lance le mode de jeu sélectionné avec les paramètres configurés.
+
+        Args:
+            mode (str): Le mode de jeu à lancer ("base", "trap", "prv").
+        """
         # Récupérer et traiter les informations saisies
         num_rows = int(self.num_rows.get())
         num_columns = int(self.num_columns.get())
@@ -162,6 +227,7 @@ class App:
         num_balls = int(self.num_balls.get())
         size = int(self.size.get())
 
+        # Ferme la fenetre
         self.screen.destroy()
 
         if mode == "base":
@@ -175,6 +241,9 @@ class App:
                                      num_obstacles=num_obstacles, num_balls=num_balls, size=size)
 
     def submit_game_rules(self):
+        """
+        Récupère les règles configurées et lance le jeu en utilisant ces règles.
+        """
         # Récupérer et traiter les informations saisies
         num_rows = int(self.num_rows.get())
         num_columns = int(self.num_columns.get())

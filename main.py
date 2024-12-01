@@ -9,7 +9,7 @@ def main():
     puis démarre la simulation.
     """
     root = tk.Tk()
-    App(root)
+    Menu(root)
     root.mainloop()
 
 
