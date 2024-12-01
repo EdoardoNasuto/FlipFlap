@@ -1,4 +1,5 @@
 from src.views.libs.tkiteasy import *
+from tkinter import Listbox
 
 
 class GameView:
@@ -165,3 +166,32 @@ class GameView:
         """
         self.window.attendreClic()
         self.window.fermerFenetre()
+
+    def listbox_popup(self, elements: list):
+        self.selected_index = None
+
+        root = tk.Tk()
+        root.title("Exemple Listbox")
+
+        # Création de la Listbox
+        listbox = tk.Listbox(root, height=10, width=30)
+        listbox.pack(pady=20)
+
+        # Ajout d'éléments à la Listbox
+        for element in elements:
+            listbox.insert(tk.END, element)
+
+        def on_validate():
+            selection = listbox.curselection()
+            if selection:
+                self.selected_index = selection[0]
+            root.quit()  # Ferme la fenêtre après validation
+
+        # Bouton de validation
+        validate_button = tk.Button(root, text="Valider", command=on_validate)
+        validate_button.pack(pady=10)
+
+        root.mainloop()  # L'attente de l'utilisateur
+        root.destroy()
+
+        return self.selected_index

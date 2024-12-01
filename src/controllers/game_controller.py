@@ -69,28 +69,27 @@ class GameController:
 
     def players_turn(self, n: int, player_choises: list):
         for i in range(n):
-            print(player_choises)
-            for choice in player_choises:
-                print(choice[0].value)
+            index = self.view.listbox_popup(
+                [choices[0].value for choices in player_choises])
 
-            res = int(input("Choisi une action : "))
-
-            if player_choises[res-1][0] == PlayerChoices.CHANGE_OBSTACLE_COLOR:
+            if player_choises[index][0] == PlayerChoices.CHANGE_OBSTACLE_COLOR:
                 self.change_obstacle_color_on_click(
-                    player_choises[res-1][1], True)
-            if player_choises[res-1][0] == PlayerChoices.ADD_OBSTACLE:
-                self.add_obstacle(player_choises[res-1][1], "black")
+                    player_choises[index][1], True)
+            if player_choises[index][0] == PlayerChoices.ADD_OBSTACLE:
+                self.add_obstacle(player_choises[index][1], "black")
 
     def add_obstacle(self, mode, color):
         clic = self.view.attend_clic()
-
-        obstacle: Obstacle = self.model.add_obstacle(clic.x//self.view.size,
-                                                     clic.y//self.view.size, color)
-        obstacle.object_view = self.view.draw_obstacle(
-            obstacle.x, obstacle.y, color)
-        self.view.window.placerAuDessous(obstacle.object_view)
-        self._change_obstacle_color(obstacle, mode, True)
-        self.view.refresh()
+        if self.model.grid[clic.x//self.view.size][clic.y//self.view.size] == None:
+            obstacle: Obstacle = self.model.add_obstacle(clic.x//self.view.size,
+                                                         clic.y//self.view.size, color)
+            obstacle.object_view = self.view.draw_obstacle(
+                obstacle.x, obstacle.y, color)
+            self.view.window.placerAuDessous(obstacle.object_view)
+            self._change_obstacle_color(obstacle, mode, True)
+            self.view.refresh()
+        else:
+            self.add_obstacle(mode, color)
 
     def change_obstacle_color_on_click(self, mode: str, blocking: bool = False) -> None:
         """
@@ -106,6 +105,8 @@ class GameController:
                                        self.view.size][clic.x // self.view.size]
             if obstacle:
                 self._change_obstacle_color(obstacle, mode)
+            elif blocking:
+                self.change_obstacle_color_on_click(mode, True)
 
     def change_obstacle_color_if_ball_present(self, ball: Ball, mode=str) -> None:
         """
