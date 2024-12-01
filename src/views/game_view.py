@@ -174,7 +174,7 @@ class GameView:
         self.window.attendreClic()
         self.window.fermerFenetre()
 
-    def listbox_popup(self, elements: list):
+    def listbox_popup(self, num_player: str, elements: list):
         """
         Affiche une fenêtre de sélection de liste et retourne l'élément choisi.
 
@@ -187,7 +187,7 @@ class GameView:
         self.selected_index = None
 
         root = tk.Tk()
-        root.title("Exemple Listbox")
+        root.title(num_player)
 
         # Création de la Listbox
         listbox = tk.Listbox(root, height=10, width=30)

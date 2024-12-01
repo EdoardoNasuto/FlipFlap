@@ -7,26 +7,24 @@ from src.rules.params_rule import *
 
 class SetupController:
     """
-    Gère les paramètres initiaux et la configuration du menu pour le jeu.
+    Gère les paramètres initiaux et la configuration de la grille pour le jeu.
 
     Attributes:
         num_rows (int): Nombre de lignes dans la grille de jeu.
         num_columns (int): Nombre de colonnes dans la grille de jeu.
         num_obstacles (int): Nombre d'obstacles placés dans la grille.
         num_balls (int): Nombre de billes présentes dans le jeu.
-        game_mode (str): Mode de jeu sélectionné, tel que 'base' ou 'trap'.
     """
 
     def __init__(self, num_rows: int, num_columns: int, num_obstacles: int, num_balls: int, size: int):
         """
-        Initialise les paramètres du menu.
+        Initialise les paramètres de la grille
 
         Args:
             num_rows (int): Nombre de lignes dans la grille de jeu.
             num_columns (int): Nombre de colonnes dans la grille de jeu.
             num_obstacles (int): Nombre d'obstacles placés dans la grille.
             num_balls (int): Nombre de billes présentes dans le jeu.
-            game_mode (str): Mode de jeu sélectionné, tel que 'base' ou 'trap'.
         """
         self.num_rows = num_rows
         self.num_columns = num_columns
@@ -36,14 +34,27 @@ class SetupController:
 
     # ------------------- Public Methods -------------------
 
-    def setup_model(self, random_obstacle: ItemSetup, random_balls: ItemSetup, ball_item: ItemnType):
+    def setup_model(self, random_obstacle: ItemSetup, random_balls: ItemSetup, ball_item: ItemnType) -> None:
+        """
+        Configure le modèle de jeu en initialisant la grille, les obstacles et les billes.
+
+        Args:
+            random_obstacle (ItemSetup): La méthode de placement des obstacles (EQUALLY ou RANDOM).
+            random_balls (ItemSetup): La méthode de placement des billes (EQUALLY ou RANDOM).
+            ball_item (ItemnType): Le type d'élément à associer aux billes (par exemple, animaux).
+        """
         self.model = Grid(self.num_rows, self.num_columns)
         coords_obstacle, coords_balls = self._setup_items_coords(
             random_obstacle, random_balls)
         self._setup_obstacles(self.num_obstacles, coords_obstacle)
         self._setup_balls(self.num_balls, coords_balls, ball_item)
 
-    def setup_view(self):
+    def setup_view(self) -> None:
+        """
+        Configure la vue du jeu, dessinant la grille, les obstacles et les billes.
+
+        Cette méthode initialise les éléments visuels du jeu sur la vue.
+        """
         self.view = GameView(self.num_rows, self.num_columns, self.size)
         self.setup_obstacles()
         self.setup_grid()
@@ -51,7 +62,17 @@ class SetupController:
 
     # ------------------- Private Methods -------------------
 
-    def _setup_items_coords(self, random_obstacle, random_balls):
+    def _setup_items_coords(self, random_obstacle: ItemSetup, random_balls: ItemSetup) -> list:
+        """
+        Détermine les coordonnées des obstacles et des billes en fonction de la méthode de placement.
+
+        Args:
+            random_obstacle (ItemSetup): Méthode pour le placement des obstacles.
+            random_balls (ItemSetup): Méthode pour le placement des billes.
+
+        Returns:
+            tuple: Deux listes de coordonnées, une pour les obstacles et une pour les billes.
+        """
         obstacles_coordinates, balls_coordinates = [], []
         self.available_coords = [(x, y) for x in range(self.num_columns)
                                  for y in range(self.num_rows)]
@@ -79,7 +100,7 @@ class SetupController:
         shuffle(obstacles_coordinates), shuffle(balls_coordinates)
         return obstacles_coordinates, balls_coordinates
 
-    def _setup_obstacles(self, n, coords):
+    def _setup_obstacles(self, n: int, coords: list) -> None:
         """
         Place un nombre défini d'obstacles dans la grille à des positions uniques.
 
@@ -101,13 +122,14 @@ class SetupController:
             color = weighted_colors[i]
             self.model.add_obstacle(coords[i][0], coords[i][1], color)
 
-    def _setup_balls(self, n, coords, item):
+    def _setup_balls(self, n: int, coords: list, item: ItemnType):
         """
         Place un nombre défini de billes dans la grille.
 
         Args:
             n (int): Le nombre de billes à ajouter.
             coords (list): Liste des coordonnées pour les billes.
+            item (ItemType): Type de billes.
         """
         for i in range(n):
             direction = choice(self.model.ball_directions)

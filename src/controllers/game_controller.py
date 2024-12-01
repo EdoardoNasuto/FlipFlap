@@ -14,7 +14,6 @@ class GameController:
     Attributes:
         model (Grid): La grille contenant les obstacles et les billes.
         view (GameView): L'interface graphique pour afficher la simulation.
-        speed (float): La vitesse de la simulation, par défaut 0.1.
     """
 
     def __init__(self, grid: Grid, gui: GameView):
@@ -33,6 +32,12 @@ class GameController:
     def move_ball(self, ball: Ball) -> bool:
         """
         Met à jour la position d'une bille et interagit avec les obstacles.
+
+        Args:
+            ball (Ball): La bille à déplacer.
+
+        Returns:
+            bool: True si la bille a été déplacée avec succès, sinon False.
         """
         x1, y1 = ball.x, ball.y
         dx, dy = ball.move(test=True)
@@ -46,7 +51,10 @@ class GameController:
 
     def update_ball_direction(self, ball: Ball) -> None:
         """
-        Gère l'interaction entre une bille et un obstacle.
+        Gère l'interaction entre une bille et un obstacle, et met à jour sa direction.
+
+        Args:
+            ball (Ball): La bille dont la direction doit être mise à jour.
         """
         obstacle = self.model.grid[ball.y][ball.x]
         if obstacle:
@@ -67,10 +75,17 @@ class GameController:
         if ball:
             self.view.update_ball_direction_arrow(ball)
 
-    def players_turn(self, n: int, player_choises: list):
-        for i in range(n):
-            index = self.view.listbox_popup(
-                [choices[0].value for choices in player_choises])
+    def players_turn(self, n: int, player_choises: list) -> None:
+        """
+        Gère les actions des joueurs pendant leur tour.
+
+        Args:
+            n (int): Le nombre de joueurs à prendre en compte.
+            player_choices (list): Les choix de chaque joueur sous forme de liste.
+        """
+        for player in range(n):
+            index = self.view.listbox_popup(player,
+                                            [choices[0].value for choices in player_choises])
 
             if player_choises[index][0] == PlayerChoices.CHANGE_OBSTACLE_COLOR:
                 self.change_obstacle_color_on_click(
@@ -78,7 +93,14 @@ class GameController:
             if player_choises[index][0] == PlayerChoices.ADD_OBSTACLE:
                 self.add_obstacle(player_choises[index][1], "black")
 
-    def add_obstacle(self, mode, color):
+    def add_obstacle(self, mode, color) -> None:
+        """
+        Ajoute un obstacle sur la grille après avoir reçu un clic de l'utilisateur.
+
+        Args:
+            mode (str): Le mode de changement de couleur de l'obstacle.
+            color (str): La couleur de l'obstacle à ajouter.
+        """
         clic = self.view.attend_clic()
         if self.model.grid[clic.x//self.view.size][clic.y//self.view.size] == None:
             obstacle: Obstacle = self.model.add_obstacle(clic.x//self.view.size,
@@ -93,7 +115,11 @@ class GameController:
 
     def change_obstacle_color_on_click(self, mode: str, blocking: bool = False) -> None:
         """
-        Gère les entrées de l'utilisateur, comme les clics sur la grille.
+        Gère le changement de couleur d'un obstacle lors d'un clic de l'utilisateur.
+
+        Args:
+            mode (str): Le mode de changement de couleur.
+            blocking (bool): Si True, la fonction attend un clic avant de continuer.
         """
         if not blocking:
             clic = self.view.recup_clic()
@@ -110,7 +136,11 @@ class GameController:
 
     def change_obstacle_color_if_ball_present(self, ball: Ball, mode=str) -> None:
         """
-        Gère l'interaction entre une bille et un obstacle.
+        Change la couleur de l'obstacle si une bille est présente sur celui-ci.
+
+        Args:
+            ball (Ball): La bille en interaction avec l'obstacle.
+            mode (str): Le mode de changement de couleur de l'obstacle.
         """
         obstacle = self.model.grid[ball.y][ball.x]
         if obstacle:
@@ -119,7 +149,10 @@ class GameController:
 
     def ball_traverse_board(self, ball: Ball):
         """
-        Fait traverser la grille à la bille
+        Fait traverser la grille à la bille.
+
+        Args:
+            ball (Ball): La bille à faire traverser à travers la grille.
         """
         x1, y1 = ball.x, ball.y
         ball.traverse_board(self.model.num_columns-1, self.model.num_rows-1)
@@ -129,12 +162,18 @@ class GameController:
 
     def remove_ball(self, ball: Ball):
         """
-        Supprimer une bille du model et de la view
+        Supprime une bille de la grille et de l'interface graphique.
+
+        Args:
+            ball (Ball): La bille à supprimer.
         """
         self.view.remove_ball(ball.object_view, ball.direction_view)
         self.model.remove_ball(ball)
 
     def simulate_food_chain(self):
+        """
+        Simule la chaîne alimentaire entre les billes et les fait "manger" les unes par les autres.
+        """
         for ball in list(self.model.balls):
             for other_ball in list(self.model.balls):
                 if self._detect_collision(ball, other_ball):
@@ -143,13 +182,21 @@ class GameController:
                         self.remove_ball(ball)
 
     def rebound_ball_at_collision(self):
-        ...
+        """
+        Gère le rebond des billes lors des collisions.
+        """
+        pass
 
     # ------------------- Private Methods -------------------
 
     def _change_obstacle_color(self, obstacle: Obstacle, mode, add_mode=None) -> None:
         """
-        Change la couleur d'un obstacle.
+        Change la couleur d'un obstacle selon le mode spécifié.
+
+        Args:
+            obstacle (Obstacle): L'obstacle dont la couleur doit être modifiée.
+            mode (str): Le mode de changement de couleur.
+            add_mode (bool, optional): Si True, ajoute la couleur de l'obstacle actuel.
         """
 
         colors = list(self.model.obstacle_colors.keys())
@@ -176,6 +223,16 @@ class GameController:
                 obstacle.object_view, obstacle.color)
 
     def _detect_collision(self, ball, other_ball):
+        """
+        Détecte si deux billes entrent en collision.
+
+        Args:
+            ball (Ball): La première bille.
+            other_ball (Ball): La seconde bille.
+
+        Returns:
+            bool: True si les billes entrent en collision, sinon False.
+        """
         dir = {
             "left": (-1, 0),
             "right": (1, 0),
