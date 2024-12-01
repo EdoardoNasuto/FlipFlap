@@ -34,7 +34,7 @@ class SetupController:
 
     # ------------------- Public Methods -------------------
 
-    def setup_model(self, random_obstacle: ItemSetup, random_balls: ItemSetup, ball_item: ItemnType, json_filename: str = None) -> None:
+    def setup_model(self, random_obstacle: ItemSetup, random_balls: ItemSetup, ball_item: ItemnType, import_filename: str = None, export_filename: str = None) -> None:
         """
         Configure le modèle de jeu en initialisant la grille, les obstacles et les billes.
 
@@ -43,14 +43,16 @@ class SetupController:
             random_balls (ItemSetup): La méthode de placement des billes (EQUALLY ou RANDOM).
             ball_item (ItemnType): Le type d'élément à associer aux billes (par exemple, animaux).
         """
-        if json_filename:
-            self.import_from_json(json_filename)
+        if import_filename:
+            self.import_from_json(import_filename)
         else:
             self.model = Grid(self.num_rows, self.num_columns)
             coords_obstacle, coords_balls = self._setup_items_coords(
                 random_obstacle, random_balls)
             self._setup_obstacles(self.num_obstacles, coords_obstacle)
             self._setup_balls(self.num_balls, coords_balls, ball_item)
+            if export_filename:
+                self.export_to_json(export_filename)
 
     def setup_view(self) -> None:
         """

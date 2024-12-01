@@ -62,9 +62,15 @@ class Menu:
 
         self.json_filename = tk.Entry(frame)
         self.json_filename.grid(row=6, column=1, padx=5, pady=5)
-        label_filename = tk.Label(
-            frame, text="Nom du fichier JSON")
-        label_filename.grid(row=6, column=0, padx=5, pady=5)
+        label_import = tk.Label(
+            frame, text="Nom du fichier JSON à importer")
+        label_import.grid(row=6, column=0, padx=5, pady=5)
+
+        self.export_filename = tk.Entry(frame)
+        self.export_filename.grid(row=7, column=1, padx=5, pady=5)
+        label_export = tk.Label(
+            frame, text="Nom du fichier JSON à exporter")
+        label_export.grid(row=7, column=0, padx=5, pady=5)
 
         # ---------- BUTTON  ----------
 
@@ -234,6 +240,9 @@ class Menu:
         json_filename = str(self.json_filename.get()
                             ) if self.json_filename != "" else None
 
+        export_filename = str(self.export_filename.get()
+                              ) if self.export_filename != "" else None
+
         num_rows = int(self.num_rows.get()) if not json_filename else None
         num_columns = int(self.num_columns.get())if not json_filename else None
         num_obstacles = int(self.num_obstacles.get()
@@ -247,13 +256,16 @@ class Menu:
 
         if mode == "base":
             base_game(num_rows=num_rows, num_columns=num_columns,
-                      num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed, json_filename=json_filename)
+                      num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed,
+                      json_filename=json_filename, export_filename=export_filename)
         elif mode == "trap":
             trap_game(num_rows=num_rows, num_columns=num_columns,
-                      num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed, json_filename=json_filename)
+                      num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed,
+                      json_filename=json_filename, export_filename=export_filename)
         elif mode == "prv":
             poule_renard_vipere_game(num_rows=num_rows, num_columns=num_columns,
-                                     num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed, json_filename=json_filename)
+                                     num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed,
+                                     json_filename=json_filename, export_filename=export_filename)
 
     def submit_game_rules(self):
         """
@@ -262,6 +274,9 @@ class Menu:
         # Récupérer et traiter les informations saisies
         json_filename = str(self.json_filename.get()
                             ) if self.json_filename != "" else None
+
+        export_filename = str(self.export_filename.get()
+                              ) if self.export_filename != "" else None
 
         num_rows = int(self.num_rows.get()) if not json_filename else None
         num_columns = int(self.num_columns.get())if not json_filename else None
@@ -314,7 +329,8 @@ class Menu:
         self.screen.destroy()
 
         self.game_rules = GameRules(
-            num_rows=num_rows, num_columns=num_columns, num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed, json_filename=json_filename,
+            num_rows=num_rows, num_columns=num_columns, num_obstacles=num_obstacles, num_balls=num_balls, size=size, speed=speed,
+            json_filename=json_filename, export_filename=export_filename,
             obstacle_setup=obstacle_setup, ball_setup=ball_setup, item_type=item_type,
             obstacle_color=obstacle_colors_and_weights,
             obstacle_in_game_color_change=obstacle_in_game_color_change,
